@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="css/login.css"/>
     <script type="text/javascript" src="node_modules/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="js/register.js"></script>
+    <script type="text/javascript" src="node_modules/axios/dist/axios.js"></script>
     <title>workout_king</title>
 </head>
 <body>
@@ -53,9 +54,11 @@
             alert('Password not valid');
             return false;
         }
-        login(email,password,remember).then(status=>{
-            if(status) location.href = "/";
-            else alert('Error');
+        login(email,password,remember).then(res=>{
+            console.log(res.data);
+            let status = res.data.status;
+            //if(status) location.href = "/";
+            //else alert('Error');
         }).catch(err=>{
             console.log(err);
         })

@@ -9,13 +9,15 @@ let signup = function(email,password){
 }
 
 let login = function(email,password,remember){
-    let promise = new Promise(function(resolve, reject) {
-        resolve(true);
-
-        //reject(new Error("…")); // ignored
-        //setTimeout(() => resolve("…"));
-    });
-    return promise;
+    return axios({
+        method: 'post',
+        url: 'api/login',
+        params: {
+            "email": email,
+            "password": password,
+            "remember": remember
+        }
+    })
 }
 
 let isValidEmail = function(email){

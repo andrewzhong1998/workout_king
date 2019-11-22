@@ -4,6 +4,7 @@ import com.iamvickyav.springbootmvcjsp.connection.Database;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.sql.Connection;
@@ -25,17 +26,10 @@ public class WebController {
     }
 
     @RequestMapping(value = "/signup",method = RequestMethod.GET)
-    ModelAndView getSignupPage(){
+    ModelAndView getSignupPage() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("register");
         return modelAndView;
-    }
-
-
-    @RequestMapping(value = "/index",method = RequestMethod.GET)
-    String getHomePage(){
-        Connection conn = Database.getConnection();
-        return "home";
     }
 
     @RequestMapping(value = "/profile",method = RequestMethod.GET)
