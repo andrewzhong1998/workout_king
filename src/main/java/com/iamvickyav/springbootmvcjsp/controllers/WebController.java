@@ -10,6 +10,27 @@ import java.sql.Connection;
 
 @Controller
 public class WebController {
+    @RequestMapping(value = "/",method = RequestMethod.GET)
+    ModelAndView getIndexPage(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("index");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/login",method = RequestMethod.GET)
+    ModelAndView getLoginPage(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("login");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/signup",method = RequestMethod.GET)
+    ModelAndView getSignupPage(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("register");
+        return modelAndView;
+    }
+
 
     @RequestMapping(value = "/index",method = RequestMethod.GET)
     String getHomePage(){
