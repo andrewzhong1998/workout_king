@@ -1,0 +1,285 @@
+.bannerTitleText {
+    font-size: 250%;
+}
+
+#bannerTitle {
+	background-image: url(../image/super_healthy_food.jpg);
+    background-size: 100%;
+    background-position: center;
+}
+
+#appDescription {
+	background-color :  skyblue;
+	opacity:70%;
+}
+
+@keyframes bounce {
+	0%, 20%, 60%, 100% {
+		-webkit-transform: translateY(0);
+		transform: translateY(0);
+	}
+
+	40% {
+		-webkit-transform: translateY(-20px);
+		transform: translateY(-20px);
+	}
+
+	80% {
+		-webkit-transform: translateY(-10px);
+		transform: translateY(-10px);
+	}
+}
+
+#blockText:hover{
+    font-weight: bold;
+    animation: bounce 2s;
+}
+
+body{
+	font-family: cursive;
+}
+#instruction1{
+	text-align: center;
+	font-size: 25px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+#instruction2{
+	text-align: center;
+	font-size: 25px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+#menu{
+	text-align: center;
+	display: inline-block;
+	top: 30px;
+	left: 170px;
+	color: skyblue
+}
+#input_amount {
+    max-width: 15em;
+    top: 30px;
+    left: 170px;
+}
+.food{
+	width: 160px;
+	height: 160px;
+	position: relative;;
+	text-align: center;
+	display: inline-block;
+}
+.is-food{
+	height: 200px;
+	text-align: center;
+	padding-top: 30px;
+	padding-bottom: 30px;
+}
+
+#login{
+	background-color:skyblue;
+	font-family: cursive;
+	color:white;
+}
+
+#logo{
+	padding-bottom: 6px;
+}
+
+#pictures{
+	
+}
+
+#buttonText {
+    color: black;
+}
+
+#demoButton{
+	text-align: center;
+	padding-left: 25%;
+	padding-right: 25%;
+	display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#demoLink {
+    text-decoration:none;
+    font-family:Arial;
+    display: block;
+}
+
+.button.is-primary {
+	background-color: skyblue;
+	border-color: transparent;
+	color: #fff;
+  }
+  
+  .button.is-primary:hover, .button.is-primary.is-hovered {
+	background-color: #00c4a7;
+	border-color: transparent;
+	color: #fff;
+  }
+  
+  .button.is-primary:focus, .button.is-primary.is-focused {
+	border-color: transparent;
+	color: #fff;
+  }
+  
+  .button.is-primary:focus:not(:active), .button.is-primary.is-focused:not(:active) {
+	box-shadow: 0 0 0 0.125em rgba(0, 209, 178, 0.25);
+  }
+  
+  .button.is-primary:active, .button.is-primary.is-active {
+	background-color: #00b89c;
+	border-color: transparent;
+	color: #fff;
+  }
+  
+  .button.is-primary[disabled],
+  fieldset[disabled] .button.is-primary {
+	background-color: skyblue;
+	border-color: transparent;
+	box-shadow: none;
+  }
+  
+  .button.is-primary.is-inverted {
+	background-color: #fff;
+	color: skyblue;
+  }
+  
+  .button.is-primary.is-inverted:hover, .button.is-primary.is-inverted.is-hovered {
+	background-color: #f2f2f2;
+  }
+  
+  .button.is-primary.is-inverted[disabled],
+  fieldset[disabled] .button.is-primary.is-inverted {
+	background-color: #fff;
+	border-color: transparent;
+	box-shadow: none;
+	color: skyblue;
+  }
+  
+  .button.is-primary.is-loading::after {
+	border-color: transparent transparent #fff #fff !important;
+  }
+  
+  .button.is-primary.is-outlined {
+	background-color: transparent;
+	border-color: skyblue;
+	color: skyblue;
+  }
+  
+  .button.is-primary.is-outlined:hover, .button.is-primary.is-outlined.is-hovered, .button.is-primary.is-outlined:focus, .button.is-primary.is-outlined.is-focused {
+	background-color: skyblue;
+	border-color: skyblue;
+	color: #fff;
+  }
+  
+  .button.is-primary.is-outlined.is-loading::after {
+	border-color: transparent transparent skyblue skyblue !important;
+  }
+  
+  .button.is-primary.is-outlined.is-loading:hover::after, .button.is-primary.is-outlined.is-loading.is-hovered::after, .button.is-primary.is-outlined.is-loading:focus::after, .button.is-primary.is-outlined.is-loading.is-focused::after {
+	border-color: transparent transparent #fff #fff !important;
+  }
+  
+  .button.is-primary.is-outlined[disabled],
+  fieldset[disabled] .button.is-primary.is-outlined {
+	background-color: transparent;
+	border-color: skyblue;
+	box-shadow: none;
+	color: skyblue;
+  }
+  
+  .button.is-primary.is-inverted.is-outlined {
+	background-color: transparent;
+	border-color: #fff;
+	color: #fff;
+  }
+  
+  .button.is-primary.is-inverted.is-outlined:hover, .button.is-primary.is-inverted.is-outlined.is-hovered, .button.is-primary.is-inverted.is-outlined:focus, .button.is-primary.is-inverted.is-outlined.is-focused {
+	background-color: #fff;
+	color: skyblue;
+  }
+  
+  .button.is-primary.is-inverted.is-outlined.is-loading:hover::after, .button.is-primary.is-inverted.is-outlined.is-loading.is-hovered::after, .button.is-primary.is-inverted.is-outlined.is-loading:focus::after, .button.is-primary.is-inverted.is-outlined.is-loading.is-focused::after {
+	border-color: transparent transparent skyblue skyblue !important;
+  }
+  
+  .button.is-primary.is-inverted.is-outlined[disabled],
+  fieldset[disabled] .button.is-primary.is-inverted.is-outlined {
+	background-color: transparent;
+	border-color: #fff;
+	box-shadow: none;
+	color: #fff;
+  }
+  
+  .button.is-primary.is-light {
+	background-color: #ebfffc;
+	color: rgb(119, 205, 240);
+  }
+  
+  .button.is-primary.is-light:hover, .button.is-primary.is-light.is-hovered {
+	background-color: #defffa;
+	border-color: transparent;
+	color: rgb(119, 205, 240);
+  }
+  
+  .button.is-primary.is-light:active, .button.is-primary.is-light.is-active {
+	background-color: #d1fff8;
+	border-color: transparent;
+	color: rgb(119, 205, 240);
+  }
+  
+.is-info.input, .is-info.textarea {
+    border-color: skyblue;
+}
+
+/* quick reset and base styles */
+* {
+	margin: 0;
+	padding: 0;
+	border: 0;
+  }
+  
+  html {
+	font-family: helvetica, arial, sans-serif;
+  }
+  
+  /* relevant styles */
+  .img__wrap {
+	position: relative;
+	height: 200px;
+	width: 200px;
+  }
+  
+  .img__description_layer {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: skyblue;
+	opacity: 60%;
+	color: #fff;
+	visibility: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+  
+	/* transition effect. not necessary */
+	transition: opacity .05s, visibility .05s;
+  }
+  
+  .img__wrap:hover .img__description_layer {
+	visibility: visible;
+	opacity: 1;
+  }
+  
+  .img__description {
+	transform: translateY(1em);
+  }
+  
+  .img__wrap:hover .img__description {
+	transform: translateY(0);
+  }
