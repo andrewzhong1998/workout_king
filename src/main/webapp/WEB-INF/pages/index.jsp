@@ -4,6 +4,9 @@
 <head>
     <link rel="stylesheet" href="node_modules/bulma/css/bulma.css" />
     <link rel="stylesheet" href="css/custom_style.css" />
+    <script type="text/javascript" src="js/diet.js"></script>
+    <script type="text/javascript" src="node_modules/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="node_modules/axios/dist/axios.js"></script>
     <title>workout_king</title>
 </head>
 
@@ -378,5 +381,13 @@
 </section>
 
 </body>
-
+<script>
+    $(function(){
+        getCalories().then(data => {
+            console.log(data);
+        }).catch(err => {
+            console.log(err);
+        })
+    })
+</script>
 </html>

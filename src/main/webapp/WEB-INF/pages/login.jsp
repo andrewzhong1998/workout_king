@@ -4,8 +4,8 @@
 <head>
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/login.css"/>
-    <script type="text/javascript" src="node_modules/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="js/register.js"></script>
+    <script type="text/javascript" src="node_modules/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="node_modules/axios/dist/axios.js"></script>
     <title>workout_king</title>
 </head>
