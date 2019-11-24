@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="css/login.css"/>
     <script type="text/javascript" src="node_modules/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="js/register.js"></script>
+    <script type="text/javascript" src="node_modules/axios/dist/axios.js"></script>
     <title>workout_king</title>
 </head>
 <body>
@@ -61,15 +62,15 @@
             return false;
         }
         signup(email,password).then(status=>{
-            if(status){
+            if(status.data){
                 location.href="/";
             }
             else{
-                alert("Error")
-    }
-    }).catch(err=>{
+                alert("Email already exists")
+            }
+        }).catch(err=>{
             console.log(err);
-    })
+        })
     })
 </script>
 </html>

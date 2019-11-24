@@ -55,10 +55,8 @@
             return false;
         }
         login(email,password,remember).then(res=>{
-            console.log(res.data);
-            let status = res.data.status;
-            //if(status) location.href = "/";
-            //else alert('Error');
+            if(res.data) location.href = "/";
+            else alert('Invalid email or password');
         }).catch(err=>{
             console.log(err);
         })

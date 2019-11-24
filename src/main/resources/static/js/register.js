@@ -1,11 +1,15 @@
 let signup = function(email,password){
-    let promise = new Promise(function(resolve, reject) {
-        resolve(true);
-
-        //reject(new Error("…")); // ignored
-        //setTimeout(() => resolve("…"));
-    });
-    return promise;
+    //resolve(true);
+    //reject(new Error("…")); // ignored
+    //setTimeout(() => resolve("…"));
+    return axios({
+        method: 'post',
+        url: 'api/signup',
+        params: {
+            'email': email,
+            'password': password
+        }
+    })
 }
 
 let login = function(email,password,remember){
@@ -13,9 +17,9 @@ let login = function(email,password,remember){
         method: 'post',
         url: 'api/login',
         params: {
-            "email": email,
-            "password": password,
-            "remember": remember
+            'email': email,
+            'password': password,
+            'remember': remember
         }
     })
 }
