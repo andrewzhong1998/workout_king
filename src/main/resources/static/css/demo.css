@@ -1,3 +1,55 @@
 #buttonText {
     color: black;
 }
+
+.arrowNavi{
+    font-size:800%;
+    background-color: skyblue;
+}
+
+.tabHeader {
+    font-weight: bold;
+    font-size: 200%;
+}
+
+#buttonText{
+    color: black;
+    font-size: 125%;
+}
+
+#finishedUserInfo {
+    background-color: skyblue;
+    float: left;
+    position: relative;
+    left: -50%;
+}
+
+body{
+    font-family: cursive;
+}
+
+#titleBanner {
+    background-image: url(demo_pics/Yoga_Class.jpg);
+    opacity: .7;
+    background-size: 100%;
+    background-position: center;
+}
+
+.demoTitleText {
+    font-size: 300%;
+    color: white;
+}
+
+#buttonFloat {
+    float: left;
+    position: relative;
+    left: 50%;
+}
+
+.outerArrow {
+    text-align:center;
+}
+
+.innerArrow {
+    display: inline-block;
+}

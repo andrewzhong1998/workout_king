@@ -7,7 +7,7 @@ let genderSelect = (
             <h1 class="header">
                 Gender:
             </h1>
-            <div class=>
+            <div class="">
                 <label class="">
                     <br><input type="checkbox" id="Male">
                     Male
@@ -113,22 +113,52 @@ export const loadUserInfoPage = function() {
 
 export const handleWeightTab = function(event) {
     $(".userInput").replaceWith(tabs[2]);
+    tabCounter = 2;
+    $('#genderTab').removeClass("is-active");
+    $('#heightTab').removeClass("is-active");
+    $('#weightTab').addClass("is-active");
+    $('#targetTab').removeClass("is-active");
+    $('#allergiesTab').removeClass("is-active");
 }
 
 export const handleHeightTab = function(event) {
     $(".userInput").replaceWith(tabs[1]);
+    tabCounter = 1;
+    $('#genderTab').removeClass("is-active");
+    $('#heightTab').addClass("is-active");
+    $('#weightTab').removeClass("is-active");
+    $('#targetTab').removeClass("is-active");
+    $('#allergiesTab').removeClass("is-active");
 }
 
 export const handleGenderTab = function(event) {
     $(".userInput").replaceWith(tabs[0]);
+    tabCounter = 0;
+    $('#genderTab').addClass("is-active");
+    $('#heightTab').removeClass("is-active");
+    $('#weightTab').removeClass("is-active");
+    $('#targetTab').removeClass("is-active");
+    $('#allergiesTab').removeClass("is-active");
 }
 
 export const handleTargetTab = function(event) {
     $(".userInput").replaceWith(tabs[3]);
+    tabCounter = 3;
+    $('#genderTab').removeClass("is-active");
+    $('#heightTab').removeClass("is-active");
+    $('#weightTab').removeClass("is-active");
+    $('#targetTab').addClass("is-active");
+    $('#allergiesTab').removeClass("is-active");
 }
 
 export const handleAllergiesTab = function(event) {
     $(".userInput").replaceWith(tabs[4]);
+    tabCounter = 4;
+    $('#genderTab').removeClass("is-active");
+    $('#heightTab').removeClass("is-active");
+    $('#weightTab').removeClass("is-active");
+    $('#targetTab').removeClass("is-active");
+    $('#allergiesTab').addClass("is-active");
 }
 
 export const handleRightButton = function(event) {
@@ -137,6 +167,7 @@ export const handleRightButton = function(event) {
     }
     tabCounter++;
     $(".userInput").replaceWith(tabs[tabCounter]);
+    tooMuchWork();
 }
 
 export const handleLeftButton = function(event) {
@@ -145,6 +176,26 @@ export const handleLeftButton = function(event) {
     }
     tabCounter--;
     $(".userInput").replaceWith(tabs[tabCounter]);
+    tooMuchWork();
+}
+
+export const tooMuchWork = function () {
+    $('#genderTab').removeClass("is-active");
+    $('#heightTab').removeClass("is-active");
+    $('#weightTab').removeClass("is-active");
+    $('#targetTab').removeClass("is-active");
+    $('#allergiesTab').removeClass("is-active");
+    if(tabCounter == 0){
+        $('#genderTab').addClass("is-active");
+    } else if (tabCounter == 1){
+        $('#heightTab').addClass("is-active");
+    } else if (tabCounter == 2){
+        $('#weightTab').addClass("is-active");
+    } else if (tabCounter == 3){
+        $('#targetTab').addClass("is-active");
+    } else {
+        $('#allergiesTab').addClass("is-active");
+    }
 }
 
 $(function() {

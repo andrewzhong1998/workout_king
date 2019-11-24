@@ -1,5 +1,13 @@
 #headBanner {
-    background-color: skyblue;
+    background-image: url(demo_pics/running.jpg);
+    background-size: 100%;
+    background-position: center;
+    opacity: .7;
+}
+
+.infoTitleText {
+    font-size: 300%;
+    color:white;
 }
 
 body {
@@ -12,6 +20,9 @@ body {
 
 #finishedUserInfo {
     background-color: skyblue;
+    float: left;
+    position: relative;
+    left: -50%;
 }
 
 #buttonText{
@@ -31,6 +42,20 @@ body {
     font-size: 800%;
     text-align: center;
     background-color: skyblue;
+}
+
+#buttonFloat {
+    float: left;
+    position: relative;
+    left: 50%;
+}
+
+.outerArrow {
+    text-align:center;
+}
+
+.innerArrow {
+    display: inline-block;
 }
 
 

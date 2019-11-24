@@ -61,7 +61,7 @@
         <div class="navbar-end">
             <div class="navbar-item">
                 <div class="buttons">
-                    <a class="button is-rounded is-inverted" id="login" href="login">
+                    <a class="button is-rounded is-inverted" id="login" href="login.html">
                         Log In or Sign Up!!
                     </a>
                 </div>
@@ -145,7 +145,7 @@
         </div>
         <div class="column">
             <h3 id="instruction2">
-                Enter The Amount!
+                Enter The Amount You Had!!
             </h3>
             <div>
                 <input class="is-primary input is-rounded is-info" type="text" placeholder="Enter Serving Amount" id="input_amount">
@@ -276,51 +276,25 @@
     </div>
     <div class="columns">
         <div class="img__wrap column is-food">
-            <img class="food" src="image/Apple.jpg" alt="Apple" />
+            <img class="food" src="image/avocado.svg" alt="Avocado" />
             <div class="img__description_layer">
                 <p class="img__description">This is an apple.</p>
             </div>
         </div>
         <div class="img__wrap column is-food">
-            <img class="food" src="image/Apple.jpg" alt="Apple" />
+            <img class="food" src="image/broccoli.png" alt="Broccoli" />
             <div class="img__description_layer">
                 <p class="img__description">This is an apple.</p>
             </div>
         </div>
         <div class="img__wrap column is-food">
-            <img class="food" src="image/Apple.jpg" alt="Apple" />
+            <img class="food" src="image/carrot.png" alt="Carrot" />
             <div class="img__description_layer">
                 <p class="img__description">This is an apple.</p>
             </div>
         </div>
         <div class="img__wrap column is-food">
-            <img class="food" src="image/Apple.jpg" alt="Apple" />
-            <div class="img__description_layer">
-                <p class="img__description">This is an apple.</p>
-            </div>
-        </div>
-    </div>
-    <div class="columns">
-        <div class="img__wrap column is-food">
-            <img class="food" src="image/Apple.jpg" alt="Apple" />
-            <div class="img__description_layer">
-                <p class="img__description">This is an apple.</p>
-            </div>
-        </div>
-        <div class="img__wrap column is-food">
-            <img class="food" src="image/Apple.jpg" alt="Apple" />
-            <div class="img__description_layer">
-                <p class="img__description">This is an apple.</p>
-            </div>
-        </div>
-        <div class="img__wrap column is-food">
-            <img class="food" src="image/Apple.jpg" alt="Apple" />
-            <div class="img__description_layer">
-                <p class="img__description">This is an apple.</p>
-            </div>
-        </div>
-        <div class="img__wrap column is-food">
-            <img class="food" src="image/Apple.jpg" alt="Apple" />
+            <img class="food" src="image/cucumber.png" alt="Cucumber" />
             <div class="img__description_layer">
                 <p class="img__description">This is an apple.</p>
             </div>
@@ -328,25 +302,25 @@
     </div>
     <div class="columns">
         <div class="img__wrap column is-food">
-            <img class="food" src="image/Apple.jpg" alt="Apple" />
+            <img class="food" src="image/pizza.png" alt="Pizza" />
             <div class="img__description_layer">
                 <p class="img__description">This is an apple.</p>
             </div>
         </div>
         <div class="img__wrap column is-food">
-            <img class="food" src="image/Apple.jpg" alt="Apple" />
+            <img class="food" src="image/hamburger.png" alt="hamburger" />
             <div class="img__description_layer">
                 <p class="img__description">This is an apple.</p>
             </div>
         </div>
         <div class="img__wrap column is-food">
-            <img class="food" src="image/Apple.jpg" alt="Apple" />
+            <img class="food" src="image/burrito.svg" alt="Burrito" />
             <div class="img__description_layer">
                 <p class="img__description">This is an apple.</p>
             </div>
         </div>
         <div class="img__wrap column is-food">
-            <img class="food" src="image/Apple.jpg" alt="Apple" />
+            <img class="food" src="image/fries.png" alt="Fries" />
             <div class="img__description_layer">
                 <p class="img__description">This is an apple.</p>
             </div>
@@ -354,25 +328,51 @@
     </div>
     <div class="columns">
         <div class="img__wrap column is-food">
-            <img class="food" src="image/Apple.jpg" alt="Apple" />
+            <img class="food" src="image/cookie.png" alt="Cookie" />
             <div class="img__description_layer">
                 <p class="img__description">This is an apple.</p>
             </div>
         </div>
         <div class="img__wrap column is-food">
-            <img class="food" src="image/Apple.jpg" alt="Apple" />
+            <img class="food" src="image/ramen.png" alt="Ramen" />
             <div class="img__description_layer">
                 <p class="img__description">This is an apple.</p>
             </div>
         </div>
         <div class="img__wrap column is-food">
-            <img class="food" src="image/Apple.jpg" alt="Apple" />
+            <img class="food" src="image/coke.png" alt="Coke" />
             <div class="img__description_layer">
                 <p class="img__description">This is an apple.</p>
             </div>
         </div>
         <div class="img__wrap column is-food">
-            <img class="food" src="image/Apple.jpg" alt="Apple" />
+            <img class="food" src="image/sandwich.png" alt="Sandwich" />
+            <div class="img__description_layer">
+                <p class="img__description">This is an apple.</p>
+            </div>
+        </div>
+    </div>
+    <div class="columns">
+        <div class="img__wrap column is-food">
+            <img class="food" src="image/pasta.png" alt="Pasta" />
+            <div class="img__description_layer">
+                <p class="img__description">This is an apple.</p>
+            </div>
+        </div>
+        <div class="img__wrap column is-food">
+            <img class="food" src="image/milk.png" alt="Milk" />
+            <div class="img__description_layer">
+                <p class="img__description">This is an apple.</p>
+            </div>
+        </div>
+        <div class="img__wrap column is-food">
+            <img class="food" src="image/chocolate.png" alt="Chocolate" />
+            <div class="img__description_layer">
+                <p class="img__description">This is an apple.</p>
+            </div>
+        </div>
+        <div class="img__wrap column is-food">
+            <img class="food" src="image/coffee.jpg" alt="Coffee" />
             <div class="img__description_layer">
                 <p class="img__description">This is an apple.</p>
             </div>

@@ -49,4 +49,16 @@ public class WebController {
         modelAndView.setViewName("user_info");
         return modelAndView;
     }
+
+    @RequestMapping(value = "/demo",method = RequestMethod.GET)
+    Object getDemoPage(@CookieValue(value = "status", defaultValue = "unknown") String status){
+        if(!status.equals("login")){
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("login");
+            return modelAndView;
+        }
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("demo");
+        return modelAndView;
+    }
 }
