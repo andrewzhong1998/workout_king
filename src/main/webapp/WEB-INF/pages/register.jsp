@@ -63,7 +63,7 @@
         }
         signup(email,password).then(status=>{
             if(status.data){
-                location.href="/";
+                location.href="login";
             }
             else{
                 alert("Email already exists")

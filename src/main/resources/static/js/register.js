@@ -12,14 +12,13 @@ let signup = function(email,password){
     })
 }
 
-let login = function(email,password,remember){
+let login = function(email,password){
     return axios({
         method: 'post',
         url: 'api/login',
         params: {
             'email': email,
-            'password': password,
-            'remember': remember
+            'password': password
         }
     })
 }

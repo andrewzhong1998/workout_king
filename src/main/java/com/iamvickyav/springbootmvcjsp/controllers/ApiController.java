@@ -4,22 +4,29 @@ import com.iamvickyav.springbootmvcjsp.models.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api")
 public class ApiController {
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    Object test(){
-        Map<String,Object> res = new HashMap<String,Object>();
-        res.put("status",true);
-        return res;
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    Object login(@RequestParam String email, @RequestParam String password, HttpServletResponse response){
+        Cookie cookie = new Cookie("status", "login");
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        return User.getUserByEmail(email);
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    Object login(@RequestParam String email, @RequestParam String password, @RequestParam boolean remember){
-        return User.getUserByEmail(email);
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    Object logout(HttpServletResponse response){
+        Cookie cookie = new Cookie("status", null);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        return true;
     }
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)

@@ -25,10 +25,12 @@
                             <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
                             <label for="inputPassword">Password</label>
                         </div>
+                        <!--
                         <div class="custom-control custom-checkbox mb-3">
                             <input type="checkbox" class="custom-control-input" id="customCheck1">
                             <label class="custom-control-label" for="customCheck1">Remember password</label>
                         </div>
+                        -->
                         <button class="btn btn-lg btn-primary btn-block text-uppercase" id="buttonLogin">Log In</button>
                         <button class="btn btn-lg btn-primary btn-block text-uppercase" id="buttonSignup">Sign up</button>
                     </div>
@@ -45,7 +47,7 @@
     $('#buttonLogin').on('click',function(){
         let email = $('#inputEmail').val();
         let password = $('#inputPassword').val();
-        let remember = $('#customCheck1').prop('checked');
+        //let remember = $('#customCheck1').prop('checked');
         if(!isValidEmail(email)){
             alert('Email not valid');
             return false;
@@ -54,7 +56,7 @@
             alert('Password not valid');
             return false;
         }
-        login(email,password,remember).then(res=>{
+        login(email,password).then(res=>{
             if(res.data) location.href = "/";
             else alert('Invalid email or password');
         }).catch(err=>{

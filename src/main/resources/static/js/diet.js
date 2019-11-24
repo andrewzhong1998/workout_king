@@ -1,4 +1,4 @@
-let  getCalories = function(){
+let  getCalories = function(ingredients){
     return axios({
         method: 'post',
         url: 'https://api.edamam.com/api/nutrition-details',
@@ -7,7 +7,7 @@ let  getCalories = function(){
             app_key: '39063867d27088781fb1b31772bc5a3d'
         },
         data: {
-            ingr: ["1 apple","1 beef steak"]
+            ingr: ingredients//["1 apple","1 beef steak"]
         }
     })
 }
