@@ -61,8 +61,8 @@
         <div class="navbar-end">
             <div class="navbar-item">
                 <div class="buttons">
-                    <a class="button is-rounded is-inverted" id="login" href="login.html">
-                        Log In or Sign Up!!
+                    <a class="button is-rounded is-inverted" id="login" href="login">
+                        Login/Signup
                     </a>
                 </div>
             </div>
