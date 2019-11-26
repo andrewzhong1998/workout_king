@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="node_modules/bulma/css/bulma.css" />
+    <link rel="stylesheet" href="ode_modules/bulma/css/bulma.css" />
     <link rel="stylesheet" href="css/custom_style.css" />
     <script type="text/javascript" src="js/diet.js"></script>
     <script type="text/javascript" src="node_modules/jquery/dist/jquery.js"></script>
