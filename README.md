@@ -6,7 +6,7 @@ Basic database operations using Spring Data explained with simple examples
 
 Create a Spring Boot application using https://start.spring.io (Spring Initializer) by chosing dependencies as Spring Web 
 
-Please add the following: 
+Please add the following 
 
 Application.properties
 
