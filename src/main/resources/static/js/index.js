@@ -94,9 +94,11 @@ const handleAddButton = function(event){
     let b = $('#input_measure:input').val();
     let c = $('#input_food:input').val();
     let res = a.concat(' ',b,' of ',c);
-    let p = `<p class="summary">${res}</p>`
-    ingredients.push(p);
-    $('#calculate').parent().parent().parent().append(p);
+    let ans =`<div class="items">`+ `<span class="summary">${res}</span>` +
+            `<button class="delete"></button>`+`</div>`
+    ingredients.push(res);
+    console.log(ingredients);
+    $('#addItem').parent().append(ans);
     $('#input_amount:input').val('');
     $('#input_food:input').val('');
     $('#input_measure:input').val('');
