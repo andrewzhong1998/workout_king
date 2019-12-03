@@ -1,6 +1,6 @@
 .bannerTitleText {
-	font-size: 250%;
-}
+	 font-size: 250%;
+ }
 
 #bannerTitle {
 	background-image: url(../image/super_healthy_food.jpg);
@@ -345,6 +345,7 @@ button:active {
 
 .summary{
 	font-size: 1.4em;
+	margin-left: 25%;
 }
 
 #addItem{
@@ -352,4 +353,23 @@ button:active {
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+.item-block{
+	display: inline-block;
+	margin-left: 25%;
+	margin-right: 25%;
+
+}
+.tag:not(body).is-success {
+	background-color: #5fbb7f;
+	color: #fff;
+}
+
+.tag{
+	display: inline-block;
+	text-align: center;
+}
+.span{
+	width:100%;
 }
