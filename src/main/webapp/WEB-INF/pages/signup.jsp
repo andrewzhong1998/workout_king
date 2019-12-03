@@ -10,33 +10,6 @@
     <link rel="stylesheet" type="text/css" href="/css/login.css">
 </head>
 <body>
-<nav class="navbar is-white">
-    <div class="container">
-        <div class="navbar-brand">
-            <a class="navbar-item brand-text" href="/">
-                Workout King
-            </a>
-            <div class="navbar-burger burger" data-target="navMenu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-        <div id="navMenu" class="navbar-menu">
-            <div class="navbar-start">
-                <!--
-                <a class="navbar-item" href="user_dashboard.html">
-                    Home
-                </a>
-                <a class="navbar-item" href="diet.html">
-                    Diet
-                </a>
-                -->
-            </div>
-
-        </div>
-    </div>
-</nav>
 <section class="hero is-success is-fullheight">
     <div class="hero-body">
         <div class="container has-text-centered">
@@ -44,11 +17,9 @@
                 <h3 class="title has-text-black">Sign Up</h3>
                 <hr class="login-hr">
                 <div class="box">
-                    <!--
                     <figure class="avatar">
                         <img src="https://placehold.it/128x128">
                     </figure>
-                    -->
                     <div>
                         <div class="field">
                             <div class="control">
@@ -76,7 +47,7 @@
                     </div>
                 </div>
                 <p class="has-text-grey">
-                    <a href="login.html">Login</a>
+                    <a href="/login">Login</a>
                 </p>
             </div>
         </div>
@@ -110,7 +81,7 @@
         }
         signup(email,password).then(res=>{
             if(res.data){
-                location.href = "login.html"
+                location.href = "/login"
             }
             else{
                 alert("Email already exists");

@@ -4,7 +4,7 @@ let signup = function(email,password){
     //setTimeout(() => resolve("…"));
     return axios({
         method: 'post',
-        url: 'api/signup',
+        url: '/api/signup',
         params: {
             'email': email,
             'password': password
@@ -15,7 +15,7 @@ let signup = function(email,password){
 let login = function(email,password){
     return axios({
         method: 'post',
-        url: 'api/login',
+        url: '/api/login',
         params: {
             'email': email,
             'password': password

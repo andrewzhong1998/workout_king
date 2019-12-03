@@ -1,21 +1,21 @@
 // Get the <datalist> and <input> elements.
-var dataList = document.getElementById('json-datalist');
-var input = document.getElementById('ajax');
+let dataList = document.getElementById('food_list');
+let input = document.getElementById('input_food');
 
 // Create a new XMLHttpRequest.
-var request = new XMLHttpRequest();
+let request = new XMLHttpRequest();
 
 // Handle state changes for the request.
 request.onreadystatechange = function(response) {
     if (request.readyState === 4) {
         if (request.status === 200) {
             // Parse the JSON
-            var jsonOptions = JSON.parse(request.responseText);
+            let jsonOptions = JSON.parse(request.responseText);
 
             // Loop over the JSON array.
-            jsonOptions.forEach(function(item) {
+            jsonOptions.name.forEach(function(item) {
                 // Create a new <option> element.
-                var option = document.createElement('option');
+                let option = document.createElement('option');
                 // Set the value using the item in the JSON array.
                 option.value = item;
                 // Add the <option> element to the <datalist>.
@@ -23,7 +23,7 @@ request.onreadystatechange = function(response) {
             });
 
             // Update the placeholder text.
-            input.placeholder = "e.g. datalist";
+            input.placeholder = "e.g. Apple";
         } else {
             // An error occured :(
             input.placeholder = "Couldn't load datalist options :(";
@@ -33,7 +33,90 @@ request.onreadystatechange = function(response) {
 
 // Update the placeholder text.
 input.placeholder = "Loading options...";
-
 // Set up and make the request.
-request.open('GET', 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/4621/html-elements.json', true);
+request.open('GET', 'foodName.json', true);
 request.send();
+
+
+let debounce = function(func, wait, immediate) {
+    var timeout, args, context, timestamp, result;
+
+    var later = function() {
+        // 据上一次触发时间间隔
+        var last = _.now() - timestamp;
+
+        // 上次被包装函数被调用时间间隔last小于设定时间间隔wait
+        if (last < wait && last > 0) {
+            timeout = setTimeout(later, wait - last);
+        } else {
+            timeout = null;
+            // 如果设定为immediate===true，因为开始边界已经调用过了此处无需调用
+            if (!immediate) {
+                result = func.apply(context, args);
+                if (!timeout) context = args = null;
+            }
+        }
+    };
+
+    return function() {
+        context = this;
+        args = arguments;
+        timestamp = _.now();
+        var callNow = immediate && !timeout;
+        // 如果延时不存在，重新设定延时
+        if (!timeout) timeout = setTimeout(later, wait);
+        if (callNow) {
+            result = func.apply(context, args);
+            context = args = null;
+        }
+
+        return result;
+    };
+};
+let getCalories = function(ingredients){
+    return axios({
+        method: 'post',
+        url: 'https://api.edamam.com/api/nutrition-details',
+        params: {
+            app_id: 'c653bc23',
+            app_key: '39063867d27088781fb1b31772bc5a3d'
+        },
+        data: {
+            ingr: ingredients//["1 apple","1 beef steak"]
+        }
+    })
+}
+
+let ingredients=[];
+
+const handleAddButton = function(event){
+    let a = $('#input_amount:input').val();
+    let b = $('#input_measure:input').val();
+    let c = $('#input_food:input').val();
+    let res = a.concat(' ',b,' of ',c);
+    let p = `<p class="summary">${res}</p>`
+    ingredients.push(p);
+    $('#calculate').parent().parent().parent().append(p);
+    $('#input_amount:input').val('');
+    $('#input_food:input').val('');
+    $('#input_measure:input').val('');
+
+}
+
+const handleCalculateButton = function(event) {
+    let res = getCalories(ingredients);
+    $('#calculate').parent().parent().parent().append(res);
+    ingredients=[];
+}
+
+const loadCalculator = function() {
+    $("input_food:text").keyup( debounce( request.onreadystatechange, 250 ) );
+    $("#addItem").on("click",handleAddButton);
+    $("#calculate").on("click",handleCalculateButton);
+}
+
+$(function() {
+    loadCalculator();
+})
+
+

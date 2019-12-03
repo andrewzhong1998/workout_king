@@ -2,43 +2,52 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/login.css"/>
-    <script type="text/javascript" src="js/register.js"></script>
-    <script type="text/javascript" src="node_modules/jquery/dist/jquery.js"></script>
-    <script type="text/javascript" src="node_modules/axios/dist/axios.js"></script>
-    <title>workout_king</title>
+    <meta charset="utf-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Questrial&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/node_modules/bulma/css/bulma.css" />
+    <link rel="stylesheet" type="text/css" href="/css/login.css">
 </head>
+
 <body>
-<div class="container">
-    <div class="row">
-        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-            <div class="card card-signin my-5">
-                <div class="card-body">
-                    <h5 class="card-title text-center">Log In</h5>
-                    <div class="form-signin">
-                        <div class="form-label-group">
-                            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-                            <label for="inputEmail">Email address</label>
+<section class="hero is-success is-fullheight">
+    <div class="hero-body">
+        <div class="container has-text-centered">
+            <div class="column is-4 is-offset-4">
+                <h3 class="title has-text-black">Login</h3>
+                <hr class="login-hr">
+                <p class="subtitle has-text-black">Please login to proceed.</p>
+                <div class="box">
+                    <figure class="avatar">
+                        <img src="https://placehold.it/128x128">
+                    </figure>
+                    <div>
+                        <div class="field">
+                            <div class="control">
+                                <input id="inputEmail" class="input is-large" type="email" placeholder="Your Email" autofocus="">
+                            </div>
                         </div>
-                        <div class="form-label-group">
-                            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-                            <label for="inputPassword">Password</label>
+
+                        <div class="field">
+                            <div class="control">
+                                <input id="inputPassword" class="input is-large" type="password" placeholder="Your Password">
+                            </div>
                         </div>
-                        <!--
-                        <div class="custom-control custom-checkbox mb-3">
-                            <input type="checkbox" class="custom-control-input" id="customCheck1">
-                            <label class="custom-control-label" for="customCheck1">Remember password</label>
-                        </div>
-                        -->
-                        <button class="btn btn-lg btn-primary btn-block text-uppercase" id="buttonLogin">Log In</button>
-                        <button class="btn btn-lg btn-primary btn-block text-uppercase" id="buttonSignup">Sign up</button>
+                        <button id="buttonLogin" class="button is-block is-info is-large is-fullwidth">Login <i class="fa fa-sign-in" aria-hidden="true"></i></button>
                     </div>
                 </div>
+                <p class="has-text-grey">
+                    <a href="/signup">Sign Up</a> &nbsp;|&nbsp; <a href="/forget">Forgot Password</a>
+                </p>
             </div>
         </div>
     </div>
-</div>
+</section>
+<script async type="text/javascript" src="/js/bulma.js"></script>
+<script type="text/javascript" src="/js/register.js"></script>
+<script type="text/javascript" src="/node_modules/jquery/dist/jquery.js"></script>
+<script type="text/javascript" src="/node_modules/axios/dist/axios.js"></script>
 </body>
 <script>
     $('#buttonSignup').on('click',function(){
@@ -47,7 +56,6 @@
     $('#buttonLogin').on('click',function(){
         let email = $('#inputEmail').val();
         let password = $('#inputPassword').val();
-        //let remember = $('#customCheck1').prop('checked');
         if(!isValidEmail(email)){
             alert('Email not valid');
             return false;
@@ -57,11 +65,16 @@
             return false;
         }
         login(email,password).then(res=>{
-            if(res.data) location.href = "/";
-            else alert('Invalid email or password');
+            console.log(res)
+            if(!res.data){
+                alert("Your email and password don't match in our database");
+                return;
+            }
+            location.href="/user/dashboard"
         }).catch(err=>{
             console.log(err);
         })
     })
 </script>
+
 </html>

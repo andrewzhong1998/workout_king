@@ -2,72 +2,63 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="node_modules/bulma/css/bulma.css" />
+    <meta charset="utf-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Questrial&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/custom_style.css" />
-    <title>workout_king</title>
+    <script src="js/index.js" type="module"></script>
+    <link rel="stylesheet" href="/node_modules/bulma/css/bulma.css" />
 </head>
 
 <body>
-<nav class="navbar" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-        <a class="navbar-item">
-            <img id="logo" src="image/wk_title.png" width="112" height="40">
-        </a>
 
-        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
-           data-target="navbarBasicExample">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-        </a>
-    </div>
-
-    <div id="navbarBasicExample" class="navbar-menu">
-        <div class="navbar-start">
-            <a class="navbar-item">
-                Home
+<nav class="navbar is-white">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item brand-text" href="/">
+                Workout Ninja
             </a>
-
-            <a class="navbar-item">
-                Documentation
-            </a>
-
-            <div class="navbar-item has-dropdown is-hoverable">
-                <a class="navbar-link">
-                    More
-                </a>
-
-                <div class="navbar-dropdown">
-                    <a class="navbar-item">
-                        About
-                    </a>
-                    <a class="navbar-item">
-                        Jobs
-                    </a>
-                    <a class="navbar-item">
-                        Contact
-                    </a>
-                    <hr class="navbar-divider">
-                    <a class="navbar-item">
-                        Report an issue
-                    </a>
-                </div>
+            <div class="navbar-burger burger" data-target="navMenu">
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
         </div>
-
+        <div id="navMenu" class="navbar-menu">
+            <div class="navbar-start">
+                <!--
+                <a class="navbar-item" href="user_dashboard.html">
+                    Home
+                </a>
+                <a class="navbar-item" href="diet.html">
+                    Diet
+                </a>
+                -->
+            </div>
+        </div>
         <div class="navbar-end">
             <div class="navbar-item">
-                <div class="buttons">
-                    <a class="button is-rounded is-inverted" id="login" href="login.html">
-                        Log In or Sign Up!!
-                    </a>
+                <div class="field is-grouped">
+                    <p class="control">
+                        <a class="button" href="login.html">
+                            Login
+                        </a>
+                    </p>
+                    <p class="control">
+                        <a class="button is-primary" href="signup.html">
+                            Sign Up
+                        </a>
+                    </p>
                 </div>
             </div>
         </div>
     </div>
 </nav>
+
 <section class="hero is-primary is-medium has-text-centered" id="bannerTitle">
     <div class="hero-body">
+        <!--
         <div class="container" id="titleText">
             <h1 class="title bannerTitleText">
                 Calorie Calculator!!!
@@ -76,6 +67,7 @@
                 Choose Your Food Items Below!!!
             </h2>
         </div>
+        -->
     </div>
 </section>
 
@@ -104,69 +96,88 @@
 <section class="section" id="calculator">
     <div class="columns is-multiline">
         <div class="column">
-            <div id="page-wrapper">
-                <h3 id="instruction1">Pick the Food You Had!</h3>
-                <input type="text" list="food_list" placeholder="Input the food name   e.g. Apple">
-
-                <datalist id="food_list">
-                    <option value="Apple">
-                    <option value="Burrito">
-                    <option value="Grape">
-                    <option value="Sandwich">
-                    <option value="Corn">
-                    
-                </datalist>
-
-
-                <label for="ajax">Pick an HTML Element (options loaded using AJAX)</label>
-                <input type="text" id="ajax" list="json-datalist" placeholder="e.g. datalist">
-                <datalist id="json-datalist"></datalist>
+            <div>
+                <h3 id="instruction1">First Step: Pick the Food You Had!</h3>
+                <input class="is-primary input is-rounded is-info" type="text" list="food_list" id="input_food" placeholder="e.g. Apple">
+                <datalist id="food_list"></datalist>
 
             </div>
         </div>
         <div class="column">
             <h3 id="instruction2">
-                Enter The Amount You Had!!
+                Second Step: Enter The Amount You Had!
             </h3>
             <div>
                 <input class="is-primary input is-rounded is-info" type="text" placeholder="Enter Serving Amount" id="input_amount">
             </div>
         </div>
         <div class="column">
-            <div class="column">
-                <h3 id="instruction3">
-                    Enter The Measure!!
-                </h3>
-                <div>
-                    <input type="text" list="measure_list" placeholder="Input the measurement   e.g. Cup">
+            <h3 id="instruction3">
+                Third Step: Enter The Measure!
+            </h3>
+            <div>
+                <input class="is-primary input is-rounded is-info"  type="text" list="measure_list" placeholder="Select the measurement" id="input_measure">
 
-                    <datalist id="measure_list">
-                        <option value="Cup">
-                        <option value="Piece">
-                        <option value="Bowl">
-                        <option value="Kilogram">
-                        <option value="Gram">
-                        <option value="Liter">
-                        <option value="Bottle">
-                    </datalist>
-
-                </div>
+                <datalist id="measure_list">
+                    <option value="Cup">
+                    <option value="Piece">
+                    <option value="Bowl">
+                    <option value="Kilogram">
+                    <option value="Gram">
+                    <option value="Liter">
+                    <option value="Bottle">
+                    <option value="Serving">
+                    <option value="Ounce">
+                </datalist>
             </div>
-            <div class="column">
         </div>
     </div>
 </section>
 
+<section>
+    <div class="buttons" id="addItem">
+        <button class="button is-info is-rounded is-outlined ">Add</button>
+    </div>
+</section>
+
 <section class="section">
-    <div class="container" style="padding:100px 20px 50px 20px">
-        <div class ="button navigationButton is-primary is-rounded is-outlined" id="demoButton">
-            <a id="demoLink" href="demo.html">
-                <p id="buttonText">
-                    Look At Your Daily Overview!!
-                </p>
-            </a>
+    <div class="columns">
+        <div class="column">
+            <div class="container" style="padding:20px 20px 50px 20px">
+                <div class ="button1 button navigationButton is-primary is-rounded is-outlined longButton" >
+                    <a id="addRecord">
+                        <p class="buttonText">
+                            Add this food to your record!
+                        </p>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="container" style="padding:20px 20px 50px 20px">
+                <div class ="button1 button navigationButton is-primary is-rounded is-outlined longButton" >
+                    <a id="calculate">
+                        <p class="buttonText">
+                            Calculate your intake nutrition!
+                        </p>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="container" style="padding:20px 20px 50px 20px">
+                <div class ="button1 button navigationButton is-primary is-rounded is-outlined longButton">
+                    <a id="demoLink" href="demo.html">
+                        <p class="buttonText">
+                            Look At Your Daily Overview!!
+                        </p>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
+
+
 </section>
 
 <section class="section" id="pictures">
@@ -380,6 +391,12 @@
     </div>
 </section>
 
+<script async type="text/javascript" src="/js/bulma.js"></script>
+<script type="text/javascript" src="/js/register.js"></script>
+<script type="text/javascript" src="/node_modules/jquery/dist/jquery.js"></script>
+<script type="text/javascript" src="/node_modules/axios/dist/axios.js"></script>
 </body>
+<script>
+</script>
 
 </html>
