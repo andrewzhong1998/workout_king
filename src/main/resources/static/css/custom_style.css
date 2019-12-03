@@ -373,3 +373,9 @@ button:active {
 .span{
 	width:100%;
 }
+
+.button.is-primary.is-outlined {
+	background-color: transparent;
+	border-color: deepskyblue;
+	color:deepskyblue;
+}
