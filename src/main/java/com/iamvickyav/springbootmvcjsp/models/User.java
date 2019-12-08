@@ -156,13 +156,18 @@ public class User {
         }
     }
 
-    public static boolean createUser(String email, String password){
+    public static boolean createUser(String email,String password,String name,double height,double target_weight,String gender,String motto){
         Connection conn = DB.getConnection();
         try{
-            String sql="insert into User (email,password) values(?,?)";
+            String sql="insert into User (email,password,name,height,target_weight,gender,motto) values(?,?,?,?,?,?,?)";
             PreparedStatement ps=conn.prepareStatement(sql);
             ps.setString(1, email);
             ps.setString(2, password);
+            ps.setString(3, name);
+            ps.setDouble(4, height);
+            ps.setDouble(5, target_weight);
+            ps.setString(6, gender);
+            ps.setString(7, motto);;
             ps.executeUpdate();
             ps.close();
             conn.close();
@@ -196,6 +201,7 @@ public class User {
     }
 
     public static void main(String[] args){
-        System.out.println(User.userExist("andrewzhong1998@outlook.com","123457890"));
+        //System.out.println(User.userExist("andrewzhong1998@outlook.com","123457890"));
+        User.createUser("a@a.com","123123123","a z",1,1,"Male","AAA");
     }
 }

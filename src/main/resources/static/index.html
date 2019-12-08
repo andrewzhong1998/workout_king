@@ -7,12 +7,162 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css?family=Questrial&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/custom_style.css" />
-    <script src="js/index.js" type="module"></script>
+    <link rel="stylesheet" href="css/kanban.css" />
     <link rel="stylesheet" href="/node_modules/bulma/css/bulma.css" />
+    <script async type="text/javascript" src="/js/bulma.js"></script>
+    <script type="text/javascript" src="/js/diet.js"></script>
+    <script type="text/javascript" src="/js/user.js"></script>
+    <script type="text/javascript" src="/node_modules/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="/node_modules/axios/dist/axios.js"></script>
 </head>
 
 <body>
+<script>
+    let user = null
+    getInfo().then(res=>{
+        user=res.data
+        if(user!='') $('#log_in').removeClass('is-hidden')
+        else  $('#not_log_in').removeClass('is-hidden')
+    }).catch(err=>{console.log(err)})
+    String.prototype.replaceAll = function(search, replacement) {
+        let target = this;
+        return target.split(search).join(replacement);
+    };
+    let switchToOverview = () => {
+        $('#tabNutrition').removeClass('is-active')
+        $('#tabOverview').addClass('is-active')
+        $('#tableNutritions').addClass('is-hidden')
+        $('#tableOverview').removeClass('is-hidden')
+    }
+    let switchToNutrition = () => {
+        $('#tabNutrition').addClass('is-active')
+        $('#tabOverview').removeClass('is-active')
+        $('#tableNutritions').removeClass('is-hidden')
+        $('#tableOverview').addClass('is-hidden')
+    }
+    let foodRecords = []
+    let foodRecords_json = []
+    let nutritions = null
+    let addRecord = () => {
+        let amount = $('#inputAmmount').val()
+        let unit = $('#selectUnit').val()
+        let food = $('#inputFood').val()
+        if(amount.length==0||food.length==0||unit.length==0) return;
+        if(isNaN(amount)){
+            alert("Amount should be a number")
+            return;
+        }
+        $('#inputAmmount').val('')
+        $('#selectUnit').val('Piece')
+        $('#inputFood').val('')
+        $('#summaryFoods').append(`<a class="list-item">${food} (${amount} ${unit})</a>`)
+        foodRecords.push(`${amount} ${unit} ${food}`)
+        foodRecords_json.push({
+            food: food,
+            amount: amount,
+            unit: unit
+        })
+        if(foodRecords.length==0) $('#summary').addClass('is-hidden');
+        else $('#summary').removeClass('is-hidden');
+    }
+    let calculate = ()=>{
+        if(foodRecords.length==0) return;
+        $('#buttonCalculate').addClass("is-loading");
+        getCalories(foodRecords).then((res)=>{
+            $('#buttonCalculate').removeClass("is-loading");
+            nutritions = res.data
+            let nutritionFacts = renderReport(nutritions)
+            console.log(nutritions)
+        }).catch((err)=>{
+            $('#buttonCalculate').removeClass("is-loading");
+            alert("Oops, the third-party API returned error message. Check console for the details.")
+            console.log(err)
+        })
+    }
+    let record = () => {
+        if(nutritions==null){
+            alert("Nothing to record")
+            return;
+        }
+        let description = $('#inputDescription').val()
+        if(description.length==0) description = "Untitled Meal"
+        let calories = 0
+        if(nutritions['calories']!=null) calories = nutritions['calories']
+        let fat = 0
+        if(nutritions.totalNutrients['FAT']!=null) fat = nutritions.totalNutrients['FAT']['quantity']
+        let carbohydrate = 0
+        if(nutritions.totalNutrients['CHOCDF']!=null) carbohydrate = nutritions.totalNutrients['CHOCDF']['quantity']
+        let protein = 0
+        if(nutritions.totalNutrients['PROCNT']!=null) protein = nutritions.totalNutrients['PROCNT']['quantity']
+        if(user==null||user=='') location.href="login.html"
+        addRecordToDatabase(description,calories,fat,carbohydrate,protein,foodRecords_json).then((res)=>{
+            if(res.data==true) location.href="user_dashboard.html"
+            else alert("Record failed")
+        }).catch((err)=>{console.log(err)})
+    }
+    let renderReport = (data) => {
+        $('#divReport').removeClass('is-hidden')
+        $('#intakeLabels').html('')
+        $('#healthLabels').html('')
+        $('#cautionLabels').html('')
+        $('#dietLabels').html('')
+        $('#listNutritions').html('')
+        let keys = Object.keys(data.totalDaily);
+        for(let i=0;i<keys.length;i++){
+            if(data.totalNutrients[keys[i]]!=null){
+                let name = data.totalDaily[keys[i]].label
+                let amount = data.totalNutrients[keys[i]].quantity + data.totalNutrients[keys[i]].unit
+                let percentage = data.totalDaily[keys[i]].quantity + data.totalDaily[keys[i]].unit
+                $('#listNutritions').append(`<tr><td>${name}</td><td>${amount}</td><td>${percentage}</td></tr>`)
+                //console.log([name,amount,percentage])
+            }
+        }
+        let cautionLabels = data.cautions
+        let dietLabels = data.dietLabels
+        let healthLabels = data.healthLabels
+        let calories = data.calories
+        let totalWeight = data.totalWeight
 
+        $('#intakeLabels').append(`
+                            <div class="board-item">
+                                <div class="board-item-content"><span>Calories: ${calories}kJ</span></div>
+                            </div>
+                            <div class="board-item">
+                                <div class="board-item-content"><span>Total Weight: ${totalWeight}g</span></div>
+                            </div>`)
+
+        if(healthLabels!=null&&healthLabels.length>0){
+            for(let i=0;i<healthLabels.length;i++) $('#healthLabels').append(`
+                            <div class="board-item">
+                                <div class="board-item-content"><span>${healthLabels[i].toLowerCase().replaceAll('_',' ')}</span></div>
+                            </div>`)
+        }else{
+            $('#healthLabels').append(`<div class="board-item">
+                                <div class="board-item-content"><span>No labels matched</span></div>
+                            </div>`)
+        }
+        if(cautionLabels!=null&&cautionLabels.length>0){
+            for(let i=0;i<cautionLabels.length;i++) $('#cautionLabels').append(`
+                            <div class="board-item">
+                                <div class="board-item-content"><span>${cautionLabels[i].toLowerCase().replaceAll('_',' ')}</span></div>
+                            </div>`)
+        }else{
+            $('#cautionLabels').append(`<div class="board-item">
+                                <div class="board-item-content"><span>No labels matched</span></div>
+                            </div>`)
+        }
+        if(dietLabels!=null&&dietLabels.length>0){
+            for(let i=0;i<dietLabels.length;i++) $('#dietLabels').append(`
+                            <div class="board-item">
+                                <div class="board-item-content"><span>${dietLabels[i].toLowerCase().replaceAll('_',' ')}</span></div>
+                            </div>`)
+        }else{
+            $('#dietLabels').append(`<div class="board-item">
+                                <div class="board-item-content"><span>No labels matched</span></div>
+                            </div>`)
+        }
+    }
+</script>
 <nav class="navbar is-white">
     <div class="container">
         <div class="navbar-brand">
@@ -39,7 +189,7 @@
         </div>
         <div class="navbar-end">
             <div class="navbar-item">
-                <div class="field is-grouped">
+                <div class="field is-grouped is-hidden" id="not_log_in">
                     <p class="control">
                         <a class="button" href="login.html">
                             Login
@@ -51,6 +201,13 @@
                         </a>
                     </p>
                 </div>
+                <div class="field is-grouped is-hidden" id="log_in">
+                    <p class="control">
+                        <a class="button is-link" href="user_dashboard.html">
+                            Dashboard
+                        </a>
+                    </p>
+                </div>
             </div>
         </div>
     </div>
@@ -58,7 +215,6 @@
 
 <section class="hero is-primary is-medium has-text-centered" id="bannerTitle">
     <div class="hero-body">
-        <!--
         <div class="container" id="titleText">
             <h1 class="title bannerTitleText">
                 Calorie Calculator!!!
@@ -67,7 +223,6 @@
                 Choose Your Food Items Below!!!
             </h2>
         </div>
-        -->
     </div>
 </section>
 
@@ -94,96 +249,127 @@
 </section>
 
 <section class="section" id="calculator">
-    <div class="columns is-multiline">
-        <div class="column">
-            <div>
-                <h3 id="instruction1">First Step: Pick the Food You Had!</h3>
-                <input class="is-primary input is-rounded is-info" type="text" list="food_list" id="input_food" placeholder="e.g. Apple">
-                <datalist id="food_list"></datalist>
-
-            </div>
-        </div>
-        <div class="column">
-            <h3 id="instruction2">
-                Second Step: Enter The Amount You Had!
-            </h3>
-            <div>
-                <input class="is-primary input is-rounded is-info" type="text" placeholder="Enter Serving Amount" id="input_amount">
-            </div>
-        </div>
-        <div class="column">
-            <h3 id="instruction3">
-                Third Step: Enter The Measure!
-            </h3>
-            <div>
-                <input class="is-primary input is-rounded is-info"  type="text" list="measure_list" placeholder="Select the measurement" id="input_measure">
-
-                <datalist id="measure_list">
-                    <option value="Cup">
-                    <option value="Piece">
-                    <option value="Bowl">
-                    <option value="Kilogram">
-                    <option value="Gram">
-                    <option value="Liter">
-                    <option value="Bottle">
-                    <option value="Serving">
-                    <option value="Ounce">
-                </datalist>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section>
-    <div class="buttons" id="addItem">
-        <button class="button is-info is-rounded is-outlined ">Add</button>
-    </div>
-</section>
-
-<section class="section">
     <div class="columns">
         <div class="column">
-            <div class="container" style="padding:20px 20px 50px 20px">
-                <div class ="button1 button navigationButton is-primary is-rounded is-outlined longButton" >
-                    <a id="addRecord">
-                        <p class="buttonText">
-                            Add this food to your record!
-                        </p>
-                    </a>
+            <div class="column">
+                <div class="field has-addons has-addons-centered">
+                    <p class="control">
+                        <input class="input" type="text" placeholder="Enter the amount" id="inputAmmount">
+                    </p>
+                    <p class="control">
+                        <span class="select">
+                            <select id="selectUnit">
+                                <option value="Piece" class="is-selected">Piece</option>
+                                <option value="Cup">Cup</option>
+                                <option value="Bowl">Bowl</option>
+                                <option value="Kilogram">Kilogram</option>
+                                <option value="Gram">Gram</option>
+                                <option value="Liter">Liter</option>
+                                <option value="Bottle">Bottle</option>
+                                <option value="Serving">Serving</option>
+                                <option value="Ounce">Ounce</option>
+                            </select>
+                        </span>
+                    </p>
+                    <p class="control">
+                        <a class="button is-static">
+                            of
+                        </a>
+                    </p>
+                    <p class="control">
+                        <input class="input" type="text" id="inputFood" placeholder="Enter the food name">
+                    </p>
+                    <p class="control">
+                        <a class="button is-primary" onclick="addRecord();">
+                            Add
+                        </a>
+                    </p>
+                </div>
+            </div>
+            <div class="column is-hidden" id="summary">
+                <div class="list is-hoverable" id="summaryFoods"></div>
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button" id="buttonCalculate" onclick="calculate();">Analyze</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="column">
-            <div class="container" style="padding:20px 20px 50px 20px">
-                <div class ="button1 button navigationButton is-primary is-rounded is-outlined longButton" >
-                    <a id="calculate">
-                        <p class="buttonText">
-                            Calculate your intake nutrition!
-                        </p>
-                    </a>
+        <div class="column is-hidden" id="divReport">
+            <div class="tabs is-boxed">
+                <ul>
+                    <li id="tabOverview" class="is-active" onclick="switchToOverview()">
+                        <a>
+                            <span>Overview</span>
+                        </a>
+                    </li>
+                    <li id="tabNutrition" onclick="switchToNutrition()">
+                        <a>
+                            <span>Nutrition</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="container">
+                <table class="table is-hidden" id="tableNutritions">
+                    <thead>
+                    <tr>
+                        <th>Nutrition</th>
+                        <th>Amount</th>
+                        <th>Daily %</th>
+                    </tr>
+                    </thead>
+                    <tbody id="listNutritions"></tbody>
+                </table>
+                <div id="tableOverview">
+                    <article class="message is-info">
+                        <div class="message-header">
+                            <p>Intake</p>
+                        </div>
+                        <div class="message-body" id="intakeLabels">
+                        </div>
+                    </article>
+                    <article class="message is-primary">
+                        <div class="message-header">
+                            <p>Health Labels</p>
+                        </div>
+                        <div class="message-body" id="healthLabels">
+                        </div>
+                    </article>
+                    <article class="message is-link">
+                        <div class="message-header">
+                            <p>Diet Labels</p>
+                        </div>
+                        <div class="message-body" id="dietLabels">
+                        </div>
+                    </article>
+                    <article class="message is-warning">
+                        <div class="message-header">
+                            <p>Cautions</p>
+                        </div>
+                        <div class="message-body" id="cautionLabels">
+                        </div>
+                    </article>
                 </div>
             </div>
-        </div>
-        <div class="column">
-            <div class="container" style="padding:20px 20px 50px 20px">
-                <div class ="button1 button navigationButton is-primary is-rounded is-outlined longButton">
-                    <a id="demoLink" href="demo.html">
-                        <p class="buttonText">
-                            Look At Your Daily Overview!!
-                        </p>
-                    </a>
+            <p class="content">
+                <div class="field has-addons has-addons-centered">
+                    <div class="control">
+                        <input type="text" id="inputDescription" placeholder="Description (e.g. Lunch)">
+                    </div>
+                    <div class="control">
+                        <button id="buttonRecord" class="button" onclick="record()">Record</button>
+                    </div>
                 </div>
-            </div>
+                <a>*To relieve the stress of our database storage, we only record calories, protein, fat, and carbohydrate for the time being.</a>
+            </p>
         </div>
     </div>
-
-
 </section>
-
 <section class="section" id="pictures">
     <div class="columns">
         <div class="img__wrap column is-food">
-            <img class="food" src="image/Apple.jpg" alt="Apple" />
+            <img class="food" src="image/apple.jpg" alt="Apple" />
             <div class="img__description_layer">
                 <p class="img__description">This is an apple.</p>
             </div>
@@ -390,11 +576,6 @@
         </div>
     </div>
 </section>
-
-<script async type="text/javascript" src="/js/bulma.js"></script>
-<script type="text/javascript" src="/js/register.js"></script>
-<script type="text/javascript" src="/node_modules/jquery/dist/jquery.js"></script>
-<script type="text/javascript" src="/node_modules/axios/dist/axios.js"></script>
 </body>
 <script>
 </script>

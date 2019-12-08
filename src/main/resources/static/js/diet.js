@@ -11,3 +11,19 @@ let  getCalories = function(ingredients){
         }
     })
 }
+
+let addRecordToDatabase = function(description,calories,fat,carbohydrate,protein,diets){
+    console.log([description,calories,fat,carbohydrate,protein,diets])
+    return axios({
+        method: 'post',
+        url: '/api/user/intake',
+        params: {
+            description: description,
+            calories: calories,
+            fat: fat,
+            carbohydrate: carbohydrate,
+            protein: protein
+        },
+        data: diets
+    })
+}

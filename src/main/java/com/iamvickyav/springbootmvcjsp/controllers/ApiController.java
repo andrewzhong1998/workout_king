@@ -35,8 +35,14 @@ public class ApiController {
     }
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    Object signup(@RequestParam String email, @RequestParam String password){
-        return User.createUser(email,password);
+    Object signup(@RequestParam String email,
+                  @RequestParam String password,
+                  @RequestParam String name,
+                  @RequestParam double height,
+                  @RequestParam double target_weight,
+                  @RequestParam String gender,
+                  @RequestParam String motto){
+        return User.createUser(email,password,name,height,target_weight,gender,motto);
     }
 
     @RequestMapping(value = "/user/me", method = RequestMethod.PUT)

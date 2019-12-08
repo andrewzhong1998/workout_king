@@ -40,8 +40,8 @@
 <section class="hero is-success is-fullheight">
     <div class="hero-body">
         <div class="container has-text-centered">
-            <div class="column is-4 is-offset-4">
-                <h3 class="title has-text-black">Sign Up</h3>
+            <div id="step1" class="column is-4 is-offset-4">
+                <h3 class="title has-text-black">Account</h3>
                 <hr class="login-hr">
                 <div class="box">
                     <!--
@@ -72,32 +72,154 @@
                                 <input id="checkAgree" type="checkbox">Agree to Terms and Conditions
                             </label>
                         </div>
-                        <button id="buttonSignup" class="button is-block is-info is-large is-fullwidth">Sign Up <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+                        <button id="buttonNext" class="button is-block is-info is-large is-fullwidth">Next</button>
                     </div>
                 </div>
                 <p class="has-text-grey">
                     <a href="login.html">Login</a>
                 </p>
             </div>
+            <div id="step2" class="column is-hidden">
+                <h3 class="title has-text-black">Profile</h3>
+                <hr class="login-hr">
+                <div class="field">
+                    <label class="label">Name</label>
+                    <div class="control">
+                        <input id="inputName" class="input" type="text" placeholder="Last First">
+                    </div>
+                    <p id="helpName" class="help is-danger is-hidden">Enter a valid name</p>
+                </div>
+
+                <div class="field">
+                    <label class="label">Height (Feet)</label>
+                    <div class="control">
+                        <input id="inputHeight" class="input" type="text" placeholder="1 Feet = 12 Inches">
+                    </div>
+                    <p id="helpHeight" class="help is-danger is-hidden">Height must be a number</p>
+                </div>
+
+                <div class="field">
+                    <label class="label">Target Weight (pounds)</label>
+                    <div class="control">
+                        <input id="inputWeight" class="input" type="text" placeholder="e.g. 160">
+                    </div>
+                    <p id="helpWeight" class="help is-danger is-hidden">Target weight must be a number</p>
+                </div>
+
+                <div class="field">
+                    <label class="label">Gender</label>
+                    <div class="control">
+                        <div class="select">
+                            <select id="inputGender">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Others">Others</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Motto</label>
+                    <div class="control">
+                        <textarea id="inputMotto" class="textarea" placeholder="Keep fighting..."></textarea>
+                    </div>
+                    <p id="helpMotto" class="help is-danger is-hidden">Enter a valid motto</p>
+                </div>
+
+                <div class="field is-grouped">
+                    <button id="buttonSignup" class="button is-block is-info is-large is-fullwidth">Sign Up <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 <script async type="text/javascript" src="/js/bulma.js"></script>
-<script type="text/javascript" src="/js/register.js"></script>
 <script type="text/javascript" src="/node_modules/jquery/dist/jquery.js"></script>
 <script type="text/javascript" src="/node_modules/axios/dist/axios.js"></script>
 </body>
 <script>
+    let isValidEmail = function(email){
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+    let signup = function(email,password,name,height,target_weight,gender,motto){
+        //resolve(true);
+        //reject(new Error("…")); // ignored
+        //setTimeout(() => resolve("…"));
+        return axios({
+        method: 'post',
+        url: '/api/signup',
+        params: {
+            'email': email,
+            'password': password,
+            'name': name,
+            'height': height,
+            'target_weight': target_weight,
+            'gender': gender,
+            'motto': motto
+        }
+    })
+    }
+    let email = ''
+    let password = ''
+    let name = ''
+    let height = ''
+    let target_weight = ''
+    let gender = ''
+    let motto = ''
     $('#buttonSignup').on('click',function(){
-        let email = $('#inputEmail').val();
-        let password = $('#inputPassword').val();
-        let confirm = $('#inputConfirm').val();
+        name = $('#inputName').val();
+        if(name==''){
+            $('#helpName').removeClass("is-hidden");
+            $('#inputName').addClass("is-danger");
+            return;
+        }
+        height = $('#inputHeight').val();
+        if(height==''||isNaN(height)){
+            $('#helpHeight').removeClass("is-hidden");
+            $('#inputHeight').addClass("is-danger");
+            return;
+        }
+        target_weight = $('#inputWeight').val();
+        if(target_weight==''||isNaN(target_weight)){
+            $('#helpWeight').removeClass("is-hidden");
+            $('#inputWeight').addClass("is-danger");
+            return;
+        }
+        gender = $('#inputGender').val();
+        motto = $('#inputMotto').val();
+        if(gender=='') gender = 'Male'
+        if(motto=='') motto = 'Keep fighting...'
+        let user = {
+            email:email,
+            password:password,
+            name:name,
+            height:height,
+            target_weight:target_weight,
+            gender:gender,
+            motto:motto}
+        //console.log(user)
+        signup(email,password,name,height,target_weight,gender,motto).then(res=>{
+            if(res.data){
+                location.href = "login.html"
+            }
+            else{
+                alert("Email already exists");
+            }
+        }).catch(err=>{
+            console.log(err);
+        })
+    })
+    $('#buttonNext').on('click',function(){
+        email = $('#inputEmail').val();
+        password = $('#inputPassword').val();
+        confirm = $('#inputConfirm').val();
         if(!isValidEmail(email)){
             alert('Email address not valid');
             return false;
         }
-        if(password.length<8){
-            alert('Password should consist of at least 8 characters');
+        if(password.length<8&&password.length>16){
+            alert('Password should consist of 8~16 characters');
             return false;
         }
         if(confirm!=password){
@@ -108,16 +230,8 @@
             alert('Please agree to our Terms and Conditions to proceed');
             return false;
         }
-        signup(email,password).then(res=>{
-            if(res.data){
-                location.href = "login.html"
-            }
-            else{
-                alert("Email already exists");
-            }
-        }).catch(err=>{
-            console.log(err);
-        })
+        $('#step1').addClass('is-hidden')
+        $('#step2').removeClass('is-hidden')
     })
 </script>
 </html>
