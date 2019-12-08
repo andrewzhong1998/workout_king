@@ -1,6 +1,6 @@
 package com.iamvickyav.springbootmvcjsp.models;
 
-import com.iamvickyav.springbootmvcjsp.connection.DB;
+import com.iamvickyav.springbootmvcjsp.connection.MS;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -91,7 +91,7 @@ public class User {
     }
 
     public static int userExist(String email,String password){
-        Connection conn = DB.getConnection();
+        Connection conn = MS.getConnection();
         int uid = -1;
         try {
             String sql="select uid from User where email=\""+email+"\" and password=\""+password+"\"";
@@ -110,7 +110,7 @@ public class User {
     }
 
     public static User getUserById(int uid){
-        Connection conn = DB.getConnection();
+        Connection conn = MS.getConnection();
         User user = null;
         try {
             String sql="select * from User where uid="+uid;
@@ -137,7 +137,7 @@ public class User {
     }
 
     public static User getUserByEmailAndPassword(String email,String password){
-        Connection conn = DB.getConnection();
+        Connection conn = MS.getConnection();
         try {
             String sql="select uid from User where email=\""+email+"\" and password=\""+password+"\"";
             PreparedStatement ps=conn.prepareStatement(sql);
@@ -157,7 +157,7 @@ public class User {
     }
 
     public static boolean createUser(String email,String password,String name,double height,double target_weight,String gender,String motto){
-        Connection conn = DB.getConnection();
+        Connection conn = MS.getConnection();
         try{
             String sql="insert into User (email,password,name,height,target_weight,gender,motto) values(?,?,?,?,?,?,?)";
             PreparedStatement ps=conn.prepareStatement(sql);
@@ -180,7 +180,7 @@ public class User {
     }
 
     public static boolean updateUserByEmailAndPassword(String email, String password, String name, double height, double target_weight, String gender, String motto) {
-        Connection conn = DB.getConnection();
+        Connection conn = MS.getConnection();
         try{
             String sql="update User set name=?, height=?, target_weight=?, gender=?, motto=? where email=\""+email+"\" and password=\""+password+"\"";
             PreparedStatement ps=conn.prepareStatement(sql);

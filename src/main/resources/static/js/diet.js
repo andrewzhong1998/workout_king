@@ -13,7 +13,7 @@ let  getCalories = function(ingredients){
 }
 
 let addRecordToDatabase = function(description,calories,fat,carbohydrate,protein,diets){
-    console.log([description,calories,fat,carbohydrate,protein,diets])
+    //console.log([description,calories,fat,carbohydrate,protein,diets])
     return axios({
         method: 'post',
         url: '/api/user/intake',
@@ -25,5 +25,13 @@ let addRecordToDatabase = function(description,calories,fat,carbohydrate,protein
             protein: protein
         },
         data: diets
+    })
+}
+
+let addJSONRecordToDatabase = function(doc){
+    return axios({
+        method: 'post',
+        url: '/api/user/intake_json',
+        data: doc
     })
 }

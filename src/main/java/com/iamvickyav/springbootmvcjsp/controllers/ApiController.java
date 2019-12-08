@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -75,6 +76,16 @@ public class ApiController {
         int uid = User.userExist(email,password);
         if(uid==-1) return false;
         return Intake.insertIntake(uid,fat,carbohydrate,protein,calories,description,diets);
+    }
+
+    @RequestMapping(value = "/user/intake_json", method = RequestMethod.POST)
+    Object insertIntakeJSON(@CookieValue(value="email", defaultValue="unknown") String email,
+                        @CookieValue(value="password", defaultValue="unknown") String password,
+                        @RequestBody Map<String,Object> json
+    ){
+        int uid = User.userExist(email, password);
+        if(uid==-1) return false;
+        return Intake.insertIntakeJSON(uid,email,json);
     }
 
 }

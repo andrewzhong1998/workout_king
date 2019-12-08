@@ -8,8 +8,7 @@
     <link href="https://fonts.googleapis.com/css?family=Questrial&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/custom_style.css" />
     <link rel="stylesheet" href="css/kanban.css" />
-    <link rel="stylesheet" href="/node_modules/bulma/css/bulma.css" />
-    <script async type="text/javascript" src="/js/bulma.js"></script>
+    <link rel="stylesheet" href="/node_modules/bulma/css/bulma.css"/>
     <script type="text/javascript" src="/js/diet.js"></script>
     <script type="text/javascript" src="/js/user.js"></script>
     <script type="text/javascript" src="/node_modules/jquery/dist/jquery.js"></script>
@@ -44,15 +43,16 @@
     let foodRecords_json = []
     let nutritions = null
     let addRecord = () => {
-        let amount = $('#inputAmmount').val()
+        let amount = $('#inputAmount').val()
         let unit = $('#selectUnit').val()
         let food = $('#inputFood').val()
+        //console.log([amount,unit,food])
         if(amount.length==0||food.length==0||unit.length==0) return;
         if(isNaN(amount)){
             alert("Amount should be a number")
             return;
         }
-        $('#inputAmmount').val('')
+        $('#inputAmount').val('')
         $('#selectUnit').val('Piece')
         $('#inputFood').val('')
         $('#summaryFoods').append(`<a class="list-item">${food} (${amount} ${unit})</a>`)
@@ -71,8 +71,8 @@
         getCalories(foodRecords).then((res)=>{
             $('#buttonCalculate').removeClass("is-loading");
             nutritions = res.data
-            let nutritionFacts = renderReport(nutritions)
-            console.log(nutritions)
+            renderReport(nutritions)
+            //console.log(nutritions)
         }).catch((err)=>{
             $('#buttonCalculate').removeClass("is-loading");
             alert("Oops, the third-party API returned error message. Check console for the details.")
@@ -86,19 +86,22 @@
         }
         let description = $('#inputDescription').val()
         if(description.length==0) description = "Untitled Meal"
-        let calories = 0
-        if(nutritions['calories']!=null) calories = nutritions['calories']
-        let fat = 0
-        if(nutritions.totalNutrients['FAT']!=null) fat = nutritions.totalNutrients['FAT']['quantity']
-        let carbohydrate = 0
-        if(nutritions.totalNutrients['CHOCDF']!=null) carbohydrate = nutritions.totalNutrients['CHOCDF']['quantity']
-        let protein = 0
-        if(nutritions.totalNutrients['PROCNT']!=null) protein = nutritions.totalNutrients['PROCNT']['quantity']
-        if(user==null||user=='') location.href="login.html"
-        addRecordToDatabase(description,calories,fat,carbohydrate,protein,foodRecords_json).then((res)=>{
-            if(res.data==true) location.href="user_dashboard.html"
-            else alert("Record failed")
-        }).catch((err)=>{console.log(err)})
+        nutritions['description'] = description
+        addJSONRecordToDatabase(nutritions).then(res=>{
+            let calories = 0
+            if(nutritions['calories']!=null) calories = nutritions['calories']
+            let fat = 0
+            if(nutritions.totalNutrients['FAT']!=null) fat = nutritions.totalNutrients['FAT']['quantity']
+            let carbohydrate = 0
+            if(nutritions.totalNutrients['CHOCDF']!=null) carbohydrate = nutritions.totalNutrients['CHOCDF']['quantity']
+            let protein = 0
+            if(nutritions.totalNutrients['PROCNT']!=null) protein = nutritions.totalNutrients['PROCNT']['quantity']
+            if(user==null||user=='') location.href="login.html"
+            addRecordToDatabase(description,calories,fat,carbohydrate,protein,foodRecords_json).then((res)=>{
+                if(res.data==true) location.href="user_dashboard.html"
+                else alert("Record failed")
+            }).catch((err)=>{console.log(err)})
+        }).catch(err=>{console.log(err)})
     }
     let renderReport = (data) => {
         $('#divReport').removeClass('is-hidden')

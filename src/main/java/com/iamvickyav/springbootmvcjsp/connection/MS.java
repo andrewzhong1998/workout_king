@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class DB {
+public class MS {
     public static Connection getConnection(){
         Connection conn = null;
         try{

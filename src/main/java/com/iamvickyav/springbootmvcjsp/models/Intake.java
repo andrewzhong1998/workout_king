@@ -1,7 +1,9 @@
 package com.iamvickyav.springbootmvcjsp.models;
 
-import com.iamvickyav.springbootmvcjsp.connection.DB;
+import com.iamvickyav.springbootmvcjsp.connection.MG;
+import com.iamvickyav.springbootmvcjsp.connection.MS;
 import com.iamvickyav.springbootmvcjsp.connection.Util;
+import org.bson.Document;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,6 +11,7 @@ import java.sql.ResultSet;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class Intake {
     private int iid;
@@ -70,7 +73,7 @@ public class Intake {
     }
 
     public static boolean insertIntake(int uid, double fat, double carbohydrate, double protein, double calories, String description, List<Diet> diets){
-        Connection conn = DB.getConnection();
+        Connection conn = MS.getConnection();
         try{
             String sql = "INSERT INTO Intake (uid,fat,carbohydrate,protein,calories,description,date) VALUES(?,?,?,?,?,?,?)";
             PreparedStatement ps = conn.prepareStatement(sql,PreparedStatement.RETURN_GENERATED_KEYS);
@@ -105,7 +108,7 @@ public class Intake {
     }
 
     public static List<Intake> getUserIntakes(int uid){
-        Connection conn = DB.getConnection();
+        Connection conn = MS.getConnection();
         List<Intake> intakes = new LinkedList<Intake>();
         try{
             String sql = "SELECT D.did,D.food,D.amount,D.unit,I.iid,I.fat,I.carbohydrate,I.protein,I.calories,I.description,I.date,I.uid" +
@@ -148,8 +151,18 @@ public class Intake {
         return intakes;
     }
 
+    public static boolean insertIntakeJSON(int uid, String email, Map<String, Object> json) {
+        Document doc = new Document();
+        doc.putAll(json);
+        doc.put("uid",uid);
+        doc.put("email",email);
+        MG.getCollection("intakes").insertOne(doc);
+        return true;
+    }
+
+
     public static boolean deleteIntake(int iid){
-        Connection conn = DB.getConnection();
+        Connection conn = MS.getConnection();
         try{
             String sql = "DELETE FROM Intake WHERE iid="+iid;
             PreparedStatement ps = conn.prepareStatement(sql);
