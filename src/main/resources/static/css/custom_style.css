@@ -1,6 +1,10 @@
-.bannerTitleText {
-	 font-size: 250%;
- }
+#titleTitle {
+	font-size: 450%;
+}
+
+#titleSub {
+	font-size: 180%;
+}
 
 #bannerTitle {
 	background-image: url(../image/super_healthy_food.jpg);
