@@ -383,3 +383,9 @@ button:active {
 	border-color: deepskyblue;
 	color:deepskyblue;
 }
+
+.instruction4{
+	text-align: center;
+	color:gray();
+	font-size: 2em;
+}
