@@ -7,8 +7,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
 @Controller
 public class WebController {
+    @RequestMapping(value = "/logout",method = RequestMethod.GET)
+    String logout(HttpServletResponse response) {
+        Cookie cookie1 = new Cookie("email", null);
+        Cookie cookie2 = new Cookie("password", null);
+        cookie1.setPath("/");
+        cookie2.setPath("/");
+        response.addCookie(cookie1);
+        response.addCookie(cookie2);
+        return "You have successfully logged out.";
+    }
     /**
     @RequestMapping(value = {"/","/index"},method = RequestMethod.GET)
     ModelAndView getIndexPage(){

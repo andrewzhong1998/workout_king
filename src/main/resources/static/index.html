@@ -7,12 +7,18 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css?family=Questrial&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/custom_style.css" />
+    <link rel='stylesheet' href="/css/prism.css">
+    <link rel="stylesheet" href="/css/cheatsheet.css">
     <link rel="stylesheet" href="css/kanban.css" />
     <link rel="stylesheet" href="/node_modules/bulma/css/bulma.css"/>
     <script type="text/javascript" src="/js/diet.js"></script>
     <script type="text/javascript" src="/js/user.js"></script>
+    <script type="text/javascript" src="/js/record.js"></script>
     <script type="text/javascript" src="/node_modules/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="/node_modules/axios/dist/axios.js"></script>
+    <script src="https://kit.fontawesome.com/7dc3015a44.js" crossorigin="anonymous"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/prism.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/1.9.1/js/OverlayScrollbars.min.js'></script>
 </head>
 
 <body>
@@ -23,143 +29,6 @@
         if(user!='') $('#log_in').removeClass('is-hidden')
         else  $('#not_log_in').removeClass('is-hidden')
     }).catch(err=>{console.log(err)})
-    String.prototype.replaceAll = function(search, replacement) {
-        let target = this;
-        return target.split(search).join(replacement);
-    };
-    let switchToOverview = () => {
-        $('#tabNutrition').removeClass('is-active')
-        $('#tabOverview').addClass('is-active')
-        $('#tableNutritions').addClass('is-hidden')
-        $('#tableOverview').removeClass('is-hidden')
-    }
-    let switchToNutrition = () => {
-        $('#tabNutrition').addClass('is-active')
-        $('#tabOverview').removeClass('is-active')
-        $('#tableNutritions').removeClass('is-hidden')
-        $('#tableOverview').addClass('is-hidden')
-    }
-    let foodRecords = []
-    let foodRecords_json = []
-    let nutritions = null
-    let addRecord = () => {
-        let amount = $('#inputAmount').val()
-        let unit = $('#selectUnit').val()
-        let food = $('#inputFood').val()
-        //console.log([amount,unit,food])
-        if(amount.length==0||food.length==0||unit.length==0) return;
-        if(isNaN(amount)){
-            alert("Amount should be a number")
-            return;
-        }
-        $('#inputAmount').val('')
-        $('#selectUnit').val('Piece')
-        $('#inputFood').val('')
-        $('#summaryFoods').append(`<a class="list-item">${food} (${amount} ${unit})</a>`)
-        foodRecords.push(`${amount} ${unit} ${food}`)
-        foodRecords_json.push({
-            food: food,
-            amount: amount,
-            unit: unit
-        })
-        if(foodRecords.length==0) $('#summary').addClass('is-hidden');
-        else $('#summary').removeClass('is-hidden');
-    }
-    let calculate = ()=>{
-        if(foodRecords.length==0) return;
-        $('#buttonCalculate').addClass("is-loading");
-        getCalories(foodRecords).then((res)=>{
-            $('#buttonCalculate').removeClass("is-loading");
-            nutritions = res.data
-            renderReport(nutritions)
-            //console.log(nutritions)
-        }).catch((err)=>{
-            $('#buttonCalculate').removeClass("is-loading");
-            alert("Oops, the third-party API returned error message. Check console for the details.")
-            console.log(err)
-        })
-    }
-    let record = () => {
-        if(nutritions==null){
-            alert("Nothing to record")
-            return;
-        }
-        let description = $('#inputDescription').val()
-        if(description.length==0) description = "Untitled Meal"
-        nutritions['description'] = description
-        nutritions['diets'] = foodRecords_json
-        nutritions['fat'] = 0
-        if(nutritions.totalNutrients['FAT']!=null) nutritions['fat'] = nutritions.totalNutrients['FAT']['quantity']
-        nutritions['carbohydrate']
-        if(nutritions.totalNutrients['CHOCDF']!=null) nutritions['carbohydrate'] = nutritions.totalNutrients['CHOCDF']['quantity']
-        nutritions['protein']
-        if(nutritions.totalNutrients['PROCNT']!=null) nutritions['protein'] = nutritions.totalNutrients['PROCNT']['quantity']
-        addJSONRecordToDatabase(nutritions).then(res=>{
-            location.href = "user_dashboard.html"
-        }).catch(err=>{console.log(err)})
-    }
-    let renderReport = (data) => {
-        $('#divReport').removeClass('is-hidden')
-        $('#intakeLabels').html('')
-        $('#healthLabels').html('')
-        $('#cautionLabels').html('')
-        $('#dietLabels').html('')
-        $('#listNutritions').html('')
-        let keys = Object.keys(data.totalDaily);
-        for(let i=0;i<keys.length;i++){
-            if(data.totalNutrients[keys[i]]!=null){
-                let name = data.totalDaily[keys[i]].label
-                let amount = data.totalNutrients[keys[i]].quantity + data.totalNutrients[keys[i]].unit
-                let percentage = data.totalDaily[keys[i]].quantity + data.totalDaily[keys[i]].unit
-                $('#listNutritions').append(`<tr><td>${name}</td><td>${amount}</td><td>${percentage}</td></tr>`)
-                //console.log([name,amount,percentage])
-            }
-        }
-        let cautionLabels = data.cautions
-        let dietLabels = data.dietLabels
-        let healthLabels = data.healthLabels
-        let calories = data.calories
-        let totalWeight = data.totalWeight
-
-        $('#intakeLabels').append(`
-                            <div class="board-item">
-                                <div class="board-item-content"><span>Calories: ${calories}kJ</span></div>
-                            </div>
-                            <div class="board-item">
-                                <div class="board-item-content"><span>Total Weight: ${totalWeight}g</span></div>
-                            </div>`)
-
-        if(healthLabels!=null&&healthLabels.length>0){
-            for(let i=0;i<healthLabels.length;i++) $('#healthLabels').append(`
-                            <div class="board-item">
-                                <div class="board-item-content"><span>${healthLabels[i].toLowerCase().replaceAll('_',' ')}</span></div>
-                            </div>`)
-        }else{
-            $('#healthLabels').append(`<div class="board-item">
-                                <div class="board-item-content"><span>No labels matched</span></div>
-                            </div>`)
-        }
-        if(cautionLabels!=null&&cautionLabels.length>0){
-            for(let i=0;i<cautionLabels.length;i++) $('#cautionLabels').append(`
-                            <div class="board-item">
-                                <div class="board-item-content"><span>${cautionLabels[i].toLowerCase().replaceAll('_',' ')}</span></div>
-                            </div>`)
-        }else{
-            $('#cautionLabels').append(`<div class="board-item">
-                                <div class="board-item-content"><span>No labels matched</span></div>
-                            </div>`)
-        }
-        if(dietLabels!=null&&dietLabels.length>0){
-            for(let i=0;i<dietLabels.length;i++) $('#dietLabels').append(`
-                            <div class="board-item">
-                                <div class="board-item-content"><span>${dietLabels[i].toLowerCase().replaceAll('_',' ')}</span></div>
-                            </div>`)
-        }else{
-            $('#dietLabels').append(`<div class="board-item">
-                                <div class="board-item-content"><span>No labels matched</span></div>
-                            </div>`)
-        }
-    }
 </script>
 <nav class="navbar is-white">
     <div class="container">
@@ -167,27 +36,15 @@
             <a class="navbar-item brand-text" href="/">
                 Workout Ninja
             </a>
-            <div class="navbar-burger burger" data-target="navMenu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-        <div id="navMenu" class="navbar-menu">
-            <div class="navbar-start">
-                <!--
-                <a class="navbar-item" href="user_dashboard.html">
-                    Home
-                </a>
-                <a class="navbar-item" href="diet.html">
-                    Diet
-                </a>
-                -->
-            </div>
         </div>
         <div class="navbar-end">
             <div class="navbar-item">
                 <div class="field is-grouped is-hidden" id="not_log_in">
+                    <p class="control">
+                        <a class="button is-link" href="documentation.html">
+                            Documentation
+                        </a>
+                    </p>
                     <p class="control">
                         <a class="button" href="login.html">
                             Login
@@ -201,6 +58,11 @@
                 </div>
                 <div class="field is-grouped is-hidden" id="log_in">
                     <p class="control">
+                        <a class="button is-primary" href="documentation.html">
+                            Documentation
+                        </a>
+                    </p>
+                    <p class="control">
                         <a class="button is-link" href="user_dashboard.html">
                             Dashboard
                         </a>
@@ -210,7 +72,36 @@
         </div>
     </div>
 </nav>
-
+<section class="hero is-primary">
+    <div class="hero-body">
+        <div class="columns">
+            <div class="column is-12">
+                <div class="container content">
+                    <i class="is-large fas fa-code"></i>
+                    <h1 class="title">workout.ninja</h1>
+                    <p class="is-italic">
+                        It can be hard to eat healthy and maintain a good lifestyle.
+                        Well, workout.ninja makes that easy as we can keep track of everything
+                        you eat and exactly what you are putting into your body.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <blockquote>
+            <div class="blockTextClass is-link">
+                <p id="blockText">
+                    "I used Calorie Calculator, and I have lost over 30 pounds!!" -- Anonymous Squirrel (Founder of workout.ninja)
+                </p>
+            </div>
+        </blockquote>
+    </div>
+</section>
+<section class="hero is-light">
+    <div class="hero-body has-text-centered">
+        <h1 class="title">What did you eat today?</h1>
+    </div>
+</section>
+<!--
 <section class="hero is-primary has-text-centered" id="bannerTitle">
     <div class="hero-body">
         <div class="container" id="titleText">
@@ -223,12 +114,11 @@
         </div>
     </div>
 </section>
-
 <section class="section" id="appDescription">
     <div class="container">
         <div class="content">
             <h1 class="title">Why Use Calorie Calculator</h1>
-            <div class=>
+            <div>
                 <blockquote>
                     <div class="blockTextClass">
                         <p id="blockText">
@@ -238,15 +128,15 @@
                 </blockquote>
                 <p>
                     We know that it can be hard to eat healthy and maintain a good lifestyle.
-                    Well, Calorie Calculator makes that easy since we can keep track of everything
+                    Well, workout.ninja makes that easy since we can keep track of everything
                     that you eat and tell you exactly what you are putting into your body.
                 </p>
             </div>
         </div>
     </div>
-</section>
+</section>-->
 
-<section class="section" id="calculator">
+<section class="hero is-light" id="calculator">
     <div class="columns">
         <div class="column">
             <div class="column">
@@ -281,7 +171,7 @@
                         </div>
                     </p>
                     <p class="control">
-                        <a class="button is-primary" onclick="addRecord();">
+                        <a class="button" onclick="addRecord();">
                             Add
                         </a>
                     </p>
@@ -366,6 +256,7 @@
             </p>
         </div>
     </div>
+    <br><br><br>
 </section>
 <script>
     let dataList = document.getElementById('food_list');
@@ -450,10 +341,8 @@
 
     }
 </script>
-<section>
-    <p class="instruction4">Click the image to add the food to your calculator!</p>
-</section>
-<section class="section" id="pictures">
+<section class="hero is-white" id="pictures">
+    <br><br>
     <div class="columns">
         <div class="img__wrap column is-food" id="Apple" onclick ='addName(this);'/>
             <img class="food" src="image/apple.jpg" alt="Apple">

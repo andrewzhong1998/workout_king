@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>Documentation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" href="/node_modules/bulma/css/bulma.css" />
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/1.9.1/css/OverlayScrollbars.min.css'>
+    <link rel='stylesheet' href='https://kingsora.github.io/OverlayScrollbars/etc/os-theme-thin-dark.css'>
+    <link rel='stylesheet' href="/css/prism.css">
+    <link rel="stylesheet" href="/css/cheatsheet.css">
+    <script type="text/javascript" src="/js/user.js"></script>
+    <script type="text/javascript" src="/node_modules/axios/dist/axios.js"></script>
+    <script type="text/javascript" src="/node_modules/jquery/dist/jquery.js"></script>
+    <script src="https://kit.fontawesome.com/7dc3015a44.js" crossorigin="anonymous"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/prism.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/1.9.1/js/OverlayScrollbars.min.js'></script>
+</head>
+<body>
+<nav class="navbar is-white">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item brand-text" href="/">
+                Workout Ninja
+            </a>
+        </div>
+        <div class="navbar-end">
+            <div class="navbar-item">
+                <div class="field is-grouped is-hidden" id="not_log_in">
+                    <p class="control">
+                        <a class="button is-link" href="documentation.html">
+                            Documentation
+                        </a>
+                    </p>
+                    <p class="control">
+                        <a class="button" href="login.html">
+                            Login
+                        </a>
+                    </p>
+                    <p class="control">
+                        <a class="button is-primary" href="signup.html">
+                            Sign Up
+                        </a>
+                    </p>
+                </div>
+                <div class="field is-grouped is-hidden" id="log_in">
+                    <p class="control">
+                        <a class="button is-primary" href="documentation.html">
+                            Documentation
+                        </a>
+                    </p>
+                    <p class="control">
+                        <a class="button is-link" href="user_dashboard.html">
+                            Dashboard
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<section class="hero is-primary">
+    <div class="hero-body">
+        <div class="columns">
+            <div class="column is-12">
+                <div class="container content">
+                    <i class="is-large fas fa-code"></i>
+                    <h1 class="title">workout.ninja</h1>
+                    <h3 class="subtitle">
+                        Next-generation health management solution
+                    </h3>
+                    <a href="https://github.com/andrewzhong1998" target="_blank" class="button is-primary is-large">
+                        <span class="icon">
+                            <i class="fab fa-github"></i>
+                        </span>
+                        <span>Github</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <div class="columns">
+            <div class="column is-3">
+                <aside class="is-medium menu">
+                    <p class="menu-label">
+                        Keywords
+                    </p>
+                    <ul class="menu-list">
+                        <li><span class="tag is-white is-medium">Java</span></li>
+                        <li><span class="tag is-white is-medium">Spring</span></li>
+                        <li><span class="tag is-white is-medium">REST</span></li>
+                        <li><span class="tag is-white is-medium">MySQL</span></li>
+                        <li><span class="tag is-white is-medium">MongoDB</span></li>
+                        <li><span class="tag is-white is-medium">Tomcat</span></li>
+                        <li><span class="tag is-white is-medium">AWS</span></li>
+                        <li><span class="tag is-white is-medium">EC2</span></li>
+                    </ul>
+                </aside>
+            </div>
+            <div class="column is-9">
+                <div class="content is-medium">
+                    <h3 class="title is-3">How we build this</h3>
+                    <div class="box">
+                        <h4 id="const" class="title is-3">Tech Stack</h4>
+                        <article class="message">
+                            <div class="message-body">
+                                This project is built on Java Spring framework. Client and sever communicate through REST APIs. Structured users' data like
+                                account information are stored in a typical RDBMS - MySQL Database, while unstructured data like users' eating records are stored
+                                in NoSQL database - MongoDB. The Application is deployed on a remote Apache Tomcat server installed on AWS EC2.
+                            </div>
+                        </article>
+                        <!--<pre><code class="language-javascript">const test = 'test';</code></pre>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    let user = null
+    getInfo().then(res=>{
+        user=res.data
+        if(user!='') $('#log_in').removeClass('is-hidden')
+        else  $('#not_log_in').removeClass('is-hidden')
+    }).catch(err=>{console.log(err)})
+
+</script>
+</body>
+</html>
