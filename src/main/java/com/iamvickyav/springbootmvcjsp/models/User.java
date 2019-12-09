@@ -18,7 +18,7 @@ public class User {
     private double weight;
     private double target_weight;
     private String motto;
-    private List<DayIntake> intakes;
+    //private List<DayIntake> intakes;
 
     public double getHeight() { return height; }
     public void setHeight(double height) { this.height = height; }
@@ -64,6 +64,7 @@ public class User {
     public void setMotto(String motto) {
         this.motto = motto;
     }
+    /**
     public List<DayIntake> getIntakes() {
         return intakes;
     }
@@ -89,6 +90,7 @@ public class User {
         this.intakes = day_intakes;
         //this.today = day_intakes.isEmpty()||!day_intakes.get(0).getDate().equals(new Date()) ? new DayIntake() : day_intakes.get(0);
     }
+     **/
 
     public static int userExist(String email,String password){
         Connection conn = MS.getConnection();
@@ -132,7 +134,7 @@ public class User {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        user.setIntakes(Intake.getUserIntakes(uid));
+        //user.setIntakes(Intake.getUserIntakes(uid));
         return user;
     }
 

@@ -10,91 +10,12 @@
     <link rel="stylesheet" type="text/css" href="/css/admin.css">
     <script type="text/javascript" src="/js/user.js"></script>
     <script type="text/javascript" src="/js/diet.js"></script>
+    <script type="text/javascript" src="/js/record.js"></script>
     <script type="text/javascript" src="/node_modules/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="/node_modules/axios/dist/axios.js"></script>
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 </head>
 <body>
-<script>
-    let switchToOverview = () => {
-        $('#tabNutrition').removeClass('is-active')
-        $('#tabOverview').addClass('is-active')
-        $('#tableNutritions').addClass('is-hidden')
-        $('#tableOverview').removeClass('is-hidden')
-    }
-    let switchToNutrition = () => {
-        $('#tabNutrition').addClass('is-active')
-        $('#tabOverview').removeClass('is-active')
-        $('#tableNutritions').removeClass('is-hidden')
-        $('#tableOverview').addClass('is-hidden')
-    }
-    let renderReport = (data) => {
-        $('#divReport').removeClass('is-hidden')
-        $('#intakeLabels').html('')
-        $('#healthLabels').html('')
-        $('#cautionLabels').html('')
-        $('#dietLabels').html('')
-        $('#listNutritions').html('')
-        let keys = Object.keys(data.totalDaily);
-        for(let i=0;i<keys.length;i++){
-            if(data.totalNutrients[keys[i]]!=null){
-                let name = data.totalDaily[keys[i]].label
-                let amount = data.totalNutrients[keys[i]].quantity + data.totalNutrients[keys[i]].unit
-                let percentage = data.totalDaily[keys[i]].quantity + data.totalDaily[keys[i]].unit
-                $('#listNutritions').append(`<tr><td>${name}</td><td>${amount}</td><td>${percentage}</td></tr>`)
-                //console.log([name,amount,percentage])
-            }
-        }
-        let cautionLabels = data.cautions
-        let dietLabels = data.dietLabels
-        let healthLabels = data.healthLabels
-        let calories = data.calories
-        let totalWeight = data.totalWeight
-
-        $('#intakeLabels').append(`
-                            <div class="board-item">
-                                <div class="board-item-content"><span>Calories: ${calories}kJ</span></div>
-                            </div>
-                            <div class="board-item">
-                                <div class="board-item-content"><span>Total Weight: ${totalWeight}g</span></div>
-                            </div>`)
-
-        if(healthLabels!=null&&healthLabels.length>0){
-            for(let i=0;i<healthLabels.length;i++) $('#healthLabels').append(`
-                            <div class="board-item">
-                                <div class="board-item-content"><span>${healthLabels[i].toLowerCase().replaceAll('_',' ')}</span></div>
-                            </div>`)
-        }else{
-            $('#healthLabels').append(`<div class="board-item">
-                                <div class="board-item-content"><span>No labels matched</span></div>
-                            </div>`)
-        }
-        if(cautionLabels!=null&&cautionLabels.length>0){
-            for(let i=0;i<cautionLabels.length;i++) $('#cautionLabels').append(`
-                            <div class="board-item">
-                                <div class="board-item-content"><span>${cautionLabels[i].toLowerCase().replaceAll('_',' ')}</span></div>
-                            </div>`)
-        }else{
-            $('#cautionLabels').append(`<div class="board-item">
-                                <div class="board-item-content"><span>No labels matched</span></div>
-                            </div>`)
-        }
-        if(dietLabels!=null&&dietLabels.length>0){
-            for(let i=0;i<dietLabels.length;i++) $('#dietLabels').append(`
-                            <div class="board-item">
-                                <div class="board-item-content"><span>${dietLabels[i].toLowerCase().replaceAll('_',' ')}</span></div>
-                            </div>`)
-        }else{
-            $('#dietLabels').append(`<div class="board-item">
-                                <div class="board-item-content"><span>No labels matched</span></div>
-                            </div>`)
-        }
-    }
-    String.prototype.replaceAll = function(search, replacement) {
-        let target = this
-        return target.split(search).join(replacement)
-    }
-</script>
 <!-- START NAV -->
 <nav class="navbar is-white">
     <div class="container">
@@ -102,24 +23,9 @@
             <a class="navbar-item brand-text" href="/">
                 Workout Ninja
             </a>
-            <!--
-            <div class="navbar-burger burger" data-target="navMenu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            -->
         </div>
         <div id="navMenu" class="navbar-menu">
             <div class="navbar-start">
-                <!--
-                <a class="navbar-item" href="user_dashboard.html">
-                    Home
-                </a>
-                <a class="navbar-item" href="diet.html">
-                    Diet
-                </a>
-                -->
             </div>
         </div>
         <div class="navbar-end is-hidden">
@@ -347,10 +253,10 @@
     let renderDetail = (summary,data) => {
         $('#dayDiets').html("");
         $('.day').html(summary._id);
-        $('#todayCalories').html(summary.calories);
-        $('#todayFat').html(summary.fat);
-        $('#todayProtein').html(summary.protein);
-        $('#todayCarbohydrate').html(summary.carbohydrate);
+        $('#todayCalories').html(r(summary.calories));
+        $('#todayFat').html(r(summary.fat));
+        $('#todayProtein').html(r(summary.protein));
+        $('#todayCarbohydrate').html(r(summary.carbohydrate));
         let foods = []
         for(let i=0;i<data.length;i++){
             let html = "";
@@ -366,10 +272,10 @@
                         <article class="tile is-child box">
                             <span class="title">`+data[i].description+`</span><br>
                             <span class="subtitle has-text-black">${html}</span><br>
-                            <span class="has-text-grey">Calories ${data[i].calories}kcal</span><br>
-                            <span class="has-text-grey">Protein ${data[i].protein}g</span><br>
-                            <span class="has-text-grey">Carbohydrate ${data[i].carbohydrate}g</span><br>
-                            <span class="has-text-grey">Fat ${data[i].fat}g</span><br>
+                            <span class="has-text-grey">Calories ${r(data[i].calories)}kcal</span><br>
+                            <span class="has-text-grey">Protein ${r(data[i].protein)}g</span><br>
+                            <span class="has-text-grey">Carbohydrate ${r(data[i].carbohydrate)}g</span><br>
+                            <span class="has-text-grey">Fat ${r(data[i].fat)}g</span><br>
                             <!--<a onclick="deleteIntake()">Delete</a>-->
                         </article>
                     </div>`)
@@ -388,7 +294,7 @@
     let renderList = (data) => {
         for(let i=0;i<data.length;i++) $('#tbodyIntakes').append(`<tr>
                                     <td width="5%"><i class="fa fa-bell-o"></i></td>
-                                    <td><span class="">${data[i].count} meal(s) on ${data[i]._id}</span><span class="is-italic has-text-grey"> (${data[i].calories}kJ cal. | ${data[i].protein}g pro. | ${data[i].carbohydrate}g carbs. | ${data[i].fat}g fat)</span></td>
+                                    <td><span class="">${data[i].count} meal(s) on ${data[i]._id}</span><span class="is-italic has-text-grey"> (${r(data[i].calories)}kJ cal. | ${r(data[i].protein)}g pro. | ${r(data[i].carbohydrate)}g carbs. | ${r(data[i].fat)}g fat)</span></td>
                                     <td class="level-right"><a class="button is-small is-primary" onclick="showDetail(`+i+`);">View</a></td>
                                 </tr>`)
     }

@@ -49,11 +49,11 @@ let record = () => {
     nutritions['description'] = description
     nutritions['diets'] = foodRecords_json
     nutritions['fat'] = 0
-    if(nutritions.totalNutrients['FAT']!=null) nutritions['fat'] = nutritions.totalNutrients['FAT']['quantity']
+    if(nutritions.totalNutrients['FAT']!=null) nutritions['fat'] = r(nutritions.totalNutrients['FAT']['quantity'])
     nutritions['carbohydrate']
-    if(nutritions.totalNutrients['CHOCDF']!=null) nutritions['carbohydrate'] = nutritions.totalNutrients['CHOCDF']['quantity']
+    if(nutritions.totalNutrients['CHOCDF']!=null) nutritions['carbohydrate'] = r(nutritions.totalNutrients['CHOCDF']['quantity'])
     nutritions['protein']
-    if(nutritions.totalNutrients['PROCNT']!=null) nutritions['protein'] = nutritions.totalNutrients['PROCNT']['quantity']
+    if(nutritions.totalNutrients['PROCNT']!=null) nutritions['protein'] = r(nutritions.totalNutrients['PROCNT']['quantity'])
     addJSONRecordToDatabase(nutritions).then(res=>{
         location.href = "user_dashboard.html"
     }).catch(err=>{console.log(err)})
@@ -69,8 +69,8 @@ let renderReport = (data) => {
     for(let i=0;i<keys.length;i++){
         if(data.totalNutrients[keys[i]]!=null){
             let name = data.totalDaily[keys[i]].label
-            let amount = data.totalNutrients[keys[i]].quantity + data.totalNutrients[keys[i]].unit
-            let percentage = data.totalDaily[keys[i]].quantity + data.totalDaily[keys[i]].unit
+            let amount = r(data.totalNutrients[keys[i]].quantity) + data.totalNutrients[keys[i]].unit
+            let percentage = r(data.totalDaily[keys[i]].quantity) + data.totalDaily[keys[i]].unit
             $('#listNutritions').append(`<tr><td>${name}</td><td>${amount}</td><td>${percentage}</td></tr>`)
             //console.log([name,amount,percentage])
         }
@@ -83,10 +83,10 @@ let renderReport = (data) => {
 
     $('#intakeLabels').append(`
                             <div class="board-item">
-                                <div class="board-item-content"><span>Calories: ${calories}kJ</span></div>
+                                <div class="board-item-content"><span>Calories: ${r(calories)}kJ</span></div>
                             </div>
                             <div class="board-item">
-                                <div class="board-item-content"><span>Total Weight: ${totalWeight}g</span></div>
+                                <div class="board-item-content"><span>Total Weight: ${r(totalWeight)}g</span></div>
                             </div>`)
 
     if(healthLabels!=null&&healthLabels.length>0){
@@ -135,3 +135,6 @@ let switchToNutrition = () => {
 let foodRecords = []
 let foodRecords_json = []
 let nutritions = null
+let r = (num) => {
+    return Math.round( num * 10 ) / 10;
+}
