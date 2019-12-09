@@ -2,32 +2,6 @@ String.prototype.replaceAll = function(search, replacement) {
     let target = this;
     return target.split(search).join(replacement);
 };
-let addRecord = () => {
-    let amount = $('#inputAmount').val()
-    let unit = $('#selectUnit').val()
-    let food = $('#inputFood').val()
-    //console.log([amount,unit,food])
-    if(amount.length==0||food.length==0||unit.length==0) return;
-    if(isNaN(amount)){
-        alert("Amount should be a number")
-        return;
-    }
-    $('#inputAmount').val('')
-    $('#selectUnit').val('Piece')
-    $('#inputFood').val('')
-    $('#summaryFoods').append(`<a class="list-item">${food} (${amount} ${unit})</a><button class="delete is-small"></button>`)
-    foodRecords.push(`${amount} ${unit} ${food}`)
-    foodRecords_json.push({
-        food: food,
-        amount: amount,
-        unit: unit
-    })
-    $(".delete").on("click", function(){
-        $(this).closest("li").remove();
-    });
-    if(foodRecords.length==0) $('#summary').addClass('is-hidden');
-    else $('#summary').removeClass('is-hidden');
-}
 let calculate = ()=>{
     if(foodRecords.length==0) return;
     $('#buttonCalculate').addClass("is-loading");
@@ -138,6 +112,40 @@ let switchToNutrition = () => {
 let foodRecords = []
 let foodRecords_json = []
 let nutritions = null
+let addRecord = () => {
+    let amount = $('#inputAmount').val()
+    let unit = $('#selectUnit').val()
+    let food = $('#inputFood').val()
+    //console.log([amount,unit,food])
+    if(amount.length==0||food.length==0||unit.length==0) return;
+    if(isNaN(amount)){
+        alert("Amount should be a number")
+        return;
+    }
+    $('#inputAmount').val('')
+    $('#selectUnit').val('Piece')
+    $('#inputFood').val('')
+    $('#summaryFoods').append(`<a class="list-item">${food} (${amount} ${unit})</a>`)
+    foodRecords.push(`${amount} ${unit} ${food}`)
+    foodRecords_json.push({
+        food: food,
+        amount: amount,
+        unit: unit
+    })
+    $('#summary').removeClass('is-hidden')
+}
+let undo = () => {
+    foodRecords.pop()
+    foodRecords_json.pop()
+    $('#summaryFoods').children().last().remove()
+    if(foodRecords.length==0) $('#summary').addClass('is-hidden')
+}
+let clearAll = () => {
+    foodRecords = []
+    foodRecords_json = []
+    $('#summaryFoods').empty()
+    if(foodRecords.length==0) $('#summary').addClass('is-hidden')
+}
 let r = (num) => {
     return Math.round( num * 10 ) / 10;
 }
