@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>User Record</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+    <!-- Bulma Version 0.8.x-->
+    <link rel="stylesheet" href="/node_modules/bulma/css/bulma.css" />
+    <link rel="stylesheet" type="text/css" href="/css/admin.css">
+    <script type="text/javascript" src="/js/user.js"></script>
+    <script type="text/javascript" src="/js/record.js"></script>
+    <script type="text/javascript" src="/js/diet.js"></script>
+    <script type="text/javascript" src="/node_modules/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="/node_modules/axios/dist/axios.js"></script>
+</head>
+
+<body>
+
+<!-- START NAV -->
+<nav class="navbar is-white">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item brand-text" href="/">
+                Workout Ninja
+            </a>
+            <!--
+            <div class="navbar-burger burger" data-target="navMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            -->
+        </div>
+        <div id="navMenu" class="navbar-menu">
+            <div class="navbar-start">
+                <!--
+                <a class="navbar-item" href="user_dashboard.html">
+                    Home
+                </a>
+                <a class="navbar-item" href="diet.html">
+                    Diet
+                </a>
+                -->
+            </div>
+        </div>
+        <div class="navbar-end is-hidden">
+            <div class="navbar-item">
+                <div class="field is-grouped" id="log_in">
+                    <p class="control">
+                        <a class="button is-primary" href="index.html">
+                            Record
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<!-- END NAV -->
+<div class="container">
+    <div class="columns">
+        <div class="column is-3 ">
+            <!-- START MENU-->
+            <aside class="menu">
+                <p class="menu-label">
+                    General
+                </p>
+                <ul class="menu-list">
+                    <li><a class="dashboard" href="user_dashboard.html">Dashboard</a></li>
+                    <li><a class="record" href="user_record.html">Record</a></li>
+                    <li><a class="profile" href="user_profile.html">Profile</a></li>
+                </ul>
+                <p class="menu-label">
+                    Account
+                </p>
+                <ul class="menu-list">
+                    <li><a class="setting" href="user_setting.html">Settings</a></li>
+                    <li><a href="/api/logout">Logout</a></li>
+                </ul>
+            </aside>
+            <!-- END MENU-->
+        </div>
+        <div class="column is-9">
+            <div class="columns">
+                <div class="column">
+                    <div class="column">
+                        <div class="field has-addons has-addons-centered">
+                            <p class="control">
+                                <input class="input" type="text" placeholder="Enter the amount" id="inputAmount">
+                            </p>
+                            <p class="control">
+                        <span class="select">
+                            <select id="selectUnit">
+                                <option value="Piece" class="is-selected">Piece</option>
+                                <option value="Cup">Cup</option>
+                                <option value="Bowl">Bowl</option>
+                                <option value="Kilogram">Kilogram</option>
+                                <option value="Gram">Gram</option>
+                                <option value="Liter">Liter</option>
+                                <option value="Bottle">Bottle</option>
+                                <option value="Serving">Serving</option>
+                                <option value="Ounce">Ounce</option>
+                            </select>
+                        </span>
+                            </p>
+                            <p class="control">
+                                <a class="button is-static">
+                                    of
+                                </a>
+                            </p>
+                            <p class="control">
+                            <div>
+                                <input class="input" type="text" id="inputFood" list="food_list" placeholder="Enter the food name">
+                                <datalist id="food_list"></datalist>
+                            </div>
+                            </p>
+                            <p class="control">
+                                <a class="button" onclick="addRecord();">
+                                    Add
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="column is-hidden" id="summary">
+                        <div class="list is-hoverable" id="summaryFoods"></div>
+                        <div class="field is-grouped">
+                            <div class="control">
+                                <button class="button" id="buttonCalculate" onclick="calculate();">Analyze</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-hidden" id="divReport">
+                    <div class="tabs is-boxed">
+                        <ul>
+                            <li id="tabOverview" class="is-active" onclick="switchToOverview()">
+                                <a>
+                                    <span>Overview</span>
+                                </a>
+                            </li>
+                            <li id="tabNutrition" onclick="switchToNutrition()">
+                                <a>
+                                    <span>Nutrition</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="container">
+                        <table class="table is-hidden" id="tableNutritions">
+                            <thead>
+                            <tr>
+                                <th>Nutrition</th>
+                                <th>Amount</th>
+                                <th>Daily %</th>
+                            </tr>
+                            </thead>
+                            <tbody id="listNutritions"></tbody>
+                        </table>
+                        <div id="tableOverview">
+                            <article class="message is-info">
+                                <div class="message-header">
+                                    <p>Intake</p>
+                                </div>
+                                <div class="message-body" id="intakeLabels">
+                                </div>
+                            </article>
+                            <article class="message is-primary">
+                                <div class="message-header">
+                                    <p>Health Labels</p>
+                                </div>
+                                <div class="message-body" id="healthLabels">
+                                </div>
+                            </article>
+                            <article class="message is-link">
+                                <div class="message-header">
+                                    <p>Diet Labels</p>
+                                </div>
+                                <div class="message-body" id="dietLabels">
+                                </div>
+                            </article>
+                            <article class="message is-warning">
+                                <div class="message-header">
+                                    <p>Cautions</p>
+                                </div>
+                                <div class="message-body" id="cautionLabels">
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                    <p class="content">
+                    <div class="field has-addons has-addons-centered">
+                        <div class="control">
+                            <input class="input" type="text" id="inputDescription" placeholder="Description (e.g. Lunch)">
+                        </div>
+                        <div class="control">
+                            <button id="buttonRecord" class="button" onclick="record()">Record</button>
+                        </div>
+                    </div>
+                    <!--<a>*To relieve the stress of our database storage, we only record calories, protein, fat, and carbohydrate for the time being.</a>-->
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $('.record').addClass("is-active");
+    getInfo().then(res=>{
+        let user=res.data;
+        if(!user){
+            location.href="login.html";
+        }
+    }).catch(err=>{
+        console.log(err);
+    })
+</script>
+</html>

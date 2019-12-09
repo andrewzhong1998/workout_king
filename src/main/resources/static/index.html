@@ -87,20 +87,15 @@
         let description = $('#inputDescription').val()
         if(description.length==0) description = "Untitled Meal"
         nutritions['description'] = description
+        nutritions['diets'] = foodRecords_json
+        nutritions['fat'] = 0
+        if(nutritions.totalNutrients['FAT']!=null) nutritions['fat'] = nutritions.totalNutrients['FAT']['quantity']
+        nutritions['carbohydrate']
+        if(nutritions.totalNutrients['CHOCDF']!=null) nutritions['carbohydrate'] = nutritions.totalNutrients['CHOCDF']['quantity']
+        nutritions['protein']
+        if(nutritions.totalNutrients['PROCNT']!=null) nutritions['protein'] = nutritions.totalNutrients['PROCNT']['quantity']
         addJSONRecordToDatabase(nutritions).then(res=>{
-            let calories = 0
-            if(nutritions['calories']!=null) calories = nutritions['calories']
-            let fat = 0
-            if(nutritions.totalNutrients['FAT']!=null) fat = nutritions.totalNutrients['FAT']['quantity']
-            let carbohydrate = 0
-            if(nutritions.totalNutrients['CHOCDF']!=null) carbohydrate = nutritions.totalNutrients['CHOCDF']['quantity']
-            let protein = 0
-            if(nutritions.totalNutrients['PROCNT']!=null) protein = nutritions.totalNutrients['PROCNT']['quantity']
-            if(user==null||user=='') location.href="login.html"
-            addRecordToDatabase(description,calories,fat,carbohydrate,protein,foodRecords_json).then((res)=>{
-                if(res.data==true) location.href="user_dashboard.html"
-                else alert("Record failed")
-            }).catch((err)=>{console.log(err)})
+            location.href = "user_dashboard.html"
         }).catch(err=>{console.log(err)})
     }
     let renderReport = (data) => {
@@ -216,14 +211,14 @@
     </div>
 </nav>
 
-<section class="hero is-primary is-medium has-text-centered" id="bannerTitle">
+<section class="hero is-primary has-text-centered" id="bannerTitle">
     <div class="hero-body">
         <div class="container" id="titleText">
             <p class="bannerTitleText" id = "titleTitle">
-                Calorie Calculator!!!
+                What did you eat today?
             </p>
             <h2 class="bannerTitleText" id = "titleSub">
-                Choose Your Food Items Below!!!
+                We help you keep track of your eating habits!
             </h2>
         </div>
     </div>
@@ -361,13 +356,13 @@
             <p class="content">
                 <div class="field has-addons has-addons-centered">
                     <div class="control">
-                        <input type="text" id="inputDescription" placeholder="Description (e.g. Lunch)">
+                        <input class="input" type="text" id="inputDescription" placeholder="Description (e.g. Lunch)">
                     </div>
                     <div class="control">
                         <button id="buttonRecord" class="button" onclick="record()">Record</button>
                     </div>
                 </div>
-                <a>*To relieve the stress of our database storage, we only record calories, protein, fat, and carbohydrate for the time being.</a>
+                <!--<a>*To relieve the stress of our database storage, we only record calories, protein, fat, and carbohydrate for the time being.</a>-->
             </p>
         </div>
     </div>

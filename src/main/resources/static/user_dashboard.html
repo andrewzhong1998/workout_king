@@ -6,13 +6,95 @@
     <title>User Dashboard</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-    <!-- Bulma Version 0.8.x-->
     <link rel="stylesheet" href="/node_modules/bulma/css/bulma.css" />
     <link rel="stylesheet" type="text/css" href="/css/admin.css">
+    <script type="text/javascript" src="/js/user.js"></script>
+    <script type="text/javascript" src="/js/diet.js"></script>
+    <script type="text/javascript" src="/node_modules/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="/node_modules/axios/dist/axios.js"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 </head>
-
 <body>
+<script>
+    let switchToOverview = () => {
+        $('#tabNutrition').removeClass('is-active')
+        $('#tabOverview').addClass('is-active')
+        $('#tableNutritions').addClass('is-hidden')
+        $('#tableOverview').removeClass('is-hidden')
+    }
+    let switchToNutrition = () => {
+        $('#tabNutrition').addClass('is-active')
+        $('#tabOverview').removeClass('is-active')
+        $('#tableNutritions').removeClass('is-hidden')
+        $('#tableOverview').addClass('is-hidden')
+    }
+    let renderReport = (data) => {
+        $('#divReport').removeClass('is-hidden')
+        $('#intakeLabels').html('')
+        $('#healthLabels').html('')
+        $('#cautionLabels').html('')
+        $('#dietLabels').html('')
+        $('#listNutritions').html('')
+        let keys = Object.keys(data.totalDaily);
+        for(let i=0;i<keys.length;i++){
+            if(data.totalNutrients[keys[i]]!=null){
+                let name = data.totalDaily[keys[i]].label
+                let amount = data.totalNutrients[keys[i]].quantity + data.totalNutrients[keys[i]].unit
+                let percentage = data.totalDaily[keys[i]].quantity + data.totalDaily[keys[i]].unit
+                $('#listNutritions').append(`<tr><td>${name}</td><td>${amount}</td><td>${percentage}</td></tr>`)
+                //console.log([name,amount,percentage])
+            }
+        }
+        let cautionLabels = data.cautions
+        let dietLabels = data.dietLabels
+        let healthLabels = data.healthLabels
+        let calories = data.calories
+        let totalWeight = data.totalWeight
 
+        $('#intakeLabels').append(`
+                            <div class="board-item">
+                                <div class="board-item-content"><span>Calories: ${calories}kJ</span></div>
+                            </div>
+                            <div class="board-item">
+                                <div class="board-item-content"><span>Total Weight: ${totalWeight}g</span></div>
+                            </div>`)
+
+        if(healthLabels!=null&&healthLabels.length>0){
+            for(let i=0;i<healthLabels.length;i++) $('#healthLabels').append(`
+                            <div class="board-item">
+                                <div class="board-item-content"><span>${healthLabels[i].toLowerCase().replaceAll('_',' ')}</span></div>
+                            </div>`)
+        }else{
+            $('#healthLabels').append(`<div class="board-item">
+                                <div class="board-item-content"><span>No labels matched</span></div>
+                            </div>`)
+        }
+        if(cautionLabels!=null&&cautionLabels.length>0){
+            for(let i=0;i<cautionLabels.length;i++) $('#cautionLabels').append(`
+                            <div class="board-item">
+                                <div class="board-item-content"><span>${cautionLabels[i].toLowerCase().replaceAll('_',' ')}</span></div>
+                            </div>`)
+        }else{
+            $('#cautionLabels').append(`<div class="board-item">
+                                <div class="board-item-content"><span>No labels matched</span></div>
+                            </div>`)
+        }
+        if(dietLabels!=null&&dietLabels.length>0){
+            for(let i=0;i<dietLabels.length;i++) $('#dietLabels').append(`
+                            <div class="board-item">
+                                <div class="board-item-content"><span>${dietLabels[i].toLowerCase().replaceAll('_',' ')}</span></div>
+                            </div>`)
+        }else{
+            $('#dietLabels').append(`<div class="board-item">
+                                <div class="board-item-content"><span>No labels matched</span></div>
+                            </div>`)
+        }
+    }
+    String.prototype.replaceAll = function(search, replacement) {
+        let target = this
+        return target.split(search).join(replacement)
+    }
+</script>
 <!-- START NAV -->
 <nav class="navbar is-white">
     <div class="container">
@@ -20,11 +102,13 @@
             <a class="navbar-item brand-text" href="/">
                 Workout Ninja
             </a>
+            <!--
             <div class="navbar-burger burger" data-target="navMenu">
                 <span></span>
                 <span></span>
                 <span></span>
             </div>
+            -->
         </div>
         <div id="navMenu" class="navbar-menu">
             <div class="navbar-start">
@@ -38,7 +122,7 @@
                 -->
             </div>
         </div>
-        <div class="navbar-end">
+        <div class="navbar-end is-hidden">
             <div class="navbar-item">
                 <div class="field is-grouped" id="log_in">
                     <p class="control">
@@ -62,6 +146,7 @@
                 </p>
                 <ul class="menu-list">
                     <li><a class="dashboard" href="user_dashboard.html">Dashboard</a></li>
+                    <li><a class="record" href="user_record.html">Record</a></li>
                     <li><a class="profile" href="user_profile.html">Profile</a></li>
                 </ul>
                 <p class="menu-label">
@@ -84,6 +169,40 @@
                         <h2 class="subtitle" id="userMotto"></h2>
                     </div>
                 </div>
+            </section>
+            <section class="card events-card">
+                <header class="card-header">
+                    <div class="tabs card-header-title">
+                        <ul>
+                            <li value="calories" class="htab is-active"><a>Calories</a></li>
+                            <li value="protein" class="htab"><a>Protein</a></li>
+                            <li value="carbohydrate" class="htab"><a>Carbohydrate</a></li>
+                            <li value="fat" class="htab"><a>Fat</a></li>
+                        </ul>
+                    </div>
+                </header>
+                <div id="overview" class="card-table" style="height: 370px">
+                </div>
+                <!--<footer class="card-footer">
+                    <a href="#" class="card-footer-item">Prev</a>&nbsp;&nbsp;&nbsp;<a href="#" class="card-footer-item">Next</a>
+                </footer>-->
+            </section>
+            <section class="card events-card">
+                <header class="card-header">
+                    <div class="tabs card-header-title">
+                        Details
+                    </div>
+                </header>
+                <div id="history" class="card-table">
+                    <div class="content">
+                        <table class="table is-fullwidth is-striped">
+                            <tbody id="tbodyIntakes"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <!--<footer class="card-footer">
+                    <a href="#" class="card-footer-item">Prev</a>&nbsp;&nbsp;&nbsp;<a href="#" class="card-footer-item">Next</a>
+                </footer>-->
             </section>
             <section class="info-tiles">
                 <p class="subtitle">Your intake summary on <span class="day"></span>:</p>
@@ -114,86 +233,83 @@
                     </div>
                 </div>
                 <p class="subtitle">What you ate on <span class="day"></span>:</p>
-                <div class="tile is-ancestor has-text-centered" id="dayDiets">
-                    <!--
-                    <div class="tile is-parent">
-                        <article class="tile is-child box">
-                            <p class="title">Lunch</p>
-                            <p class="subtitle">300(ml) Milk, 1(g) Apple</p>
-                        </article>
-                    </div>
-                    -->
-                </div>
+                <div class="tile is-ancestor has-text-centered" id="dayDiets"></div>
             </section>
-            <section class="card events-card">
-                <header class="card-header">
-                    <p class="card-header-title">
-                        Diet History
-                    </p>
-                    <!--
-                    <a href="#" class="card-header-icon" aria-label="more options">
-                        <span class="icon">
-                            <i class="fa fa-angle-down" aria-hidden="true"></i>
-                        </span>
-                    </a>
-                    -->
-                </header>
-                <div class="card-table">
-                    <div class="content">
-                        <table class="table is-fullwidth is-striped">
-                            <tbody id="tbodyIntakes"></tbody>
+            <section class="container">
+                <div class="card-table" id="divReport">
+                    <div class="tabs">
+                        <ul>
+                            <li id="tabOverview" class="is-active" onclick="switchToOverview()">
+                                <a>
+                                    <span>Overview</span>
+                                </a>
+                            </li>
+                            <li id="tabNutrition" onclick="switchToNutrition()">
+                                <a>
+                                    <span>Nutrition</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="container">
+                        <table class="table is-hidden" style="width:100%" id="tableNutritions">
+                            <thead>
+                            <tr>
+                                <th>Nutrition</th>
+                                <th>Amount</th>
+                                <th>Daily %</th>
+                            </tr>
+                            </thead>
+                            <tbody id="listNutritions"></tbody>
                         </table>
+                        <div id="tableOverview">
+                            <article class="message is-info">
+                                <div class="message-header">
+                                    <p>Intake</p>
+                                </div>
+                                <div class="message-body" id="intakeLabels">
+                                </div>
+                            </article>
+                            <article class="message is-primary">
+                                <div class="message-header">
+                                    <p>Health Labels</p>
+                                </div>
+                                <div class="message-body" id="healthLabels">
+                                </div>
+                            </article>
+                            <article class="message is-link">
+                                <div class="message-header">
+                                    <p>Diet Labels</p>
+                                </div>
+                                <div class="message-body" id="dietLabels">
+                                </div>
+                            </article>
+                            <article class="message is-warning">
+                                <div class="message-header">
+                                    <p>Cautions</p>
+                                </div>
+                                <div class="message-body" id="cautionLabels">
+                                </div>
+                            </article>
+                        </div>
                     </div>
                 </div>
-                <footer class="card-footer">
-                    <a href="#" class="card-footer-item">Prev</a>&nbsp;&nbsp;&nbsp;<a href="#" class="card-footer-item">Next</a>
-                </footer>
             </section>
         </div>
     </div>
 </div>
-<script async type="text/javascript" src="/js/bulma.js"></script>
-<script type="text/javascript" src="/js/register.js"></script>
-<script type="text/javascript" src="/js/user.js"></script>
-<script type="text/javascript" src="/node_modules/jquery/dist/jquery.js"></script>
-<script type="text/javascript" src="/node_modules/axios/dist/axios.js"></script>
 </body>
 <script>
-    let user = null;
-    let deleteIntake = function(iid){
-        alert(iid);
-    }
-    let showDetail = function(i){
-        $('#dayDiets').html("");
-        $('.day').html(user.intakes[i].date);
-        $('#todayCalories').html(user.intakes[i].calories);
-        $('#todayFat').html(user.intakes[i].fat);
-        $('#todayProtein').html(user.intakes[i].protein);
-        $('#todayCarbohydrate').html(user.intakes[i].carbohydrate);
-        for(let j=0;j<user.intakes[i].intakes.length;j++){
-            let html = "";
-            for(let k=0;k<user.intakes[i].intakes[j].diets.length;k++){
-                html += user.intakes[i].intakes[j].diets[k].amount
-                html += user.intakes[i].intakes[j].diets[k].unit
-                html += "&nbsp;"
-                html += user.intakes[i].intakes[j].diets[k].food
-                html += ";&nbsp;"
-            }
-            $('#dayDiets').append(`<div class="tile is-parent">
-                        <article class="tile is-child box">
-                            <span class="title">`+user.intakes[i].intakes[j].description+`</span><br>
-                            <span class="subtitle has-text-black">`+html+`</span><br>
-                            <span class="has-text-grey">Calories `+user.intakes[i].intakes[j].calories+`kcal</span><br>
-                            <span class="has-text-grey">Protein `+user.intakes[i].intakes[j].protein+`g</span><br>
-                            <span class="has-text-grey">Carbohydrate `+user.intakes[i].intakes[j].carbohydrate+`g</span><br>
-                            <span class="has-text-grey">Fat `+user.intakes[i].intakes[j].fat+`g</span><br>
-                            <a onclick="deleteIntake(`+user.intakes[i].intakes[j].iid+`)">Delete</a>
-                        </article>
-                    </div>`)
-        }
-    }
-
     $('.dashboard').addClass("is-active");
+    $('.htab').on('click',function () {
+        $('.htab').removeClass("is-active")
+        $(this).addClass("is-active")
+        let factor = $(this).attr("value")
+        showLineGraph(factor)
+    })
+    let user = null;
+    let summaryList = null
+    let detailList = null
 
     $(async function(){
         let data = await getInfo();
@@ -204,14 +320,143 @@
 
         $('#userName').html(user.name);
         $('#userMotto').html(user.motto);
-        showDetail(0);
-        for(let i=0;i<user.intakes.length;i++){
-            $('#tbodyIntakes').append(`<tr>
+
+        axios({
+            method: 'get',
+            url: '/api/user/intake/summary'
+        }).then(res=>{
+            summaryList = res.data
+            renderList(summaryList)
+            showLineGraph('calories')
+            if(res.data.length>0){
+                showDetail(0)
+            }
+            console.log(res.data)
+        }).catch(err=>console.log(err))
+    })
+    let showDetail = (i) => {
+        let summary = summaryList[i]
+        axios({
+            method: 'get',
+            url: '/api/user/intake/'+summary._id
+        }).then(res=>{
+            detailList = res.data
+            renderDetail(summary,detailList)
+        }).catch(err=>console.log(err))
+    }
+    let renderDetail = (summary,data) => {
+        $('#dayDiets').html("");
+        $('.day').html(summary._id);
+        $('#todayCalories').html(summary.calories);
+        $('#todayFat').html(summary.fat);
+        $('#todayProtein').html(summary.protein);
+        $('#todayCarbohydrate').html(summary.carbohydrate);
+        let foods = []
+        for(let i=0;i<data.length;i++){
+            let html = "";
+            for(let j=0;j<data[i].diets.length;j++){
+                foods.push(data[i].diets[j].amount+' '+data[i].diets[j].unit+' of '+data[i].diets[j].food)
+                html += data[i].diets[j].amount
+                html += data[i].diets[j].unit
+                html += "&nbsp;"
+                html += data[i].diets[j].food
+                html += ";&nbsp;"
+            }
+            $('#dayDiets').append(`<div class="tile is-parent">
+                        <article class="tile is-child box">
+                            <span class="title">`+data[i].description+`</span><br>
+                            <span class="subtitle has-text-black">${html}</span><br>
+                            <span class="has-text-grey">Calories ${data[i].calories}kcal</span><br>
+                            <span class="has-text-grey">Protein ${data[i].protein}g</span><br>
+                            <span class="has-text-grey">Carbohydrate ${data[i].carbohydrate}g</span><br>
+                            <span class="has-text-grey">Fat ${data[i].fat}g</span><br>
+                            <!--<a onclick="deleteIntake()">Delete</a>-->
+                        </article>
+                    </div>`)
+        }
+        if(data.length==1){
+            renderReport(data[0])
+            return
+        }
+        getCalories(foods).then(res=>{
+            renderReport(res.data)
+        }).catch(err=> {
+            alert("Oops, the third-party API returned error message. Check console for the details.")
+            console.log(err)
+        })
+    }
+    let renderList = (data) => {
+        for(let i=0;i<data.length;i++) $('#tbodyIntakes').append(`<tr>
                                     <td width="5%"><i class="fa fa-bell-o"></i></td>
-                                    <td>`+user.intakes[i].date+`</td>
+                                    <td><span class="">${data[i].count} meal(s) on ${data[i]._id}</span><span class="is-italic has-text-grey"> (${data[i].calories}kJ cal. | ${data[i].protein}g pro. | ${data[i].carbohydrate}g carbs. | ${data[i].fat}g fat)</span></td>
                                     <td class="level-right"><a class="button is-small is-primary" onclick="showDetail(`+i+`);">View</a></td>
                                 </tr>`)
+    }
+    let deleteIntake = (iid) => {
+        alert(iid);
+    }
+
+    let showLineGraph = (factor) => {
+        let dps = []
+        for(let i=0;i<summaryList.length;i++){
+            let s = summaryList[i]
+
+            let dp = {
+                x: new Date(s['_id']),
+                y: s[factor]
+            }
+
+            dps.push(dp)
         }
-    })
+        let title = 'g'
+        if(factor=='calories') title = 'kJ'
+        let chart = new CanvasJS.Chart("overview", {
+            animationEnabled: true,
+            theme: "light2",
+            axisX:{
+                valueFormatString: "DD MMM",
+                crosshair: {
+                    enabled: true,
+                    snapToDataPoint: true
+                }
+            },
+            axisY: {
+                title: title,
+                crosshair: {
+                    enabled: true
+                }
+            },
+            toolTip:{
+                shared:true
+            },
+            legend:{
+                cursor:"pointer",
+                verticalAlign: "bottom",
+                horizontalAlign: "left",
+                dockInsidePlotArea: true,
+                itemclick: toogleDataSeries
+            },
+            data: [{
+                type: "line",
+                showInLegend: true,
+                name: "Total Intake",
+                markerType: "square",
+                xValueFormatString: "DD MMM, YYYY",
+                color: "#0cd7f0",
+                dataPoints: dps
+            }]
+        });
+        chart.render();
+        //console.log(dps)
+    }
+
+    let toogleDataSeries = (e) => {
+        if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+            e.dataSeries.visible = false;
+        } else{
+            e.dataSeries.visible = true;
+        }
+        chart.render();
+    }
 </script>
 </html>

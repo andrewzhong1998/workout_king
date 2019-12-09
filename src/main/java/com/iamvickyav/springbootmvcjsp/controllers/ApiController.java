@@ -3,10 +3,13 @@ package com.iamvickyav.springbootmvcjsp.controllers;
 import com.iamvickyav.springbootmvcjsp.models.Diet;
 import com.iamvickyav.springbootmvcjsp.models.Intake;
 import com.iamvickyav.springbootmvcjsp.models.User;
+import org.bson.Document;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -86,6 +89,25 @@ public class ApiController {
         int uid = User.userExist(email, password);
         if(uid==-1) return false;
         return Intake.insertIntakeJSON(uid,email,json);
+    }
+
+    @RequestMapping(value = "/user/intake/{date}", method = RequestMethod.GET)
+    Object getUserIntakeByDate(@CookieValue(value="email", defaultValue="unknown") String email,
+                            @CookieValue(value="password", defaultValue="unknown") String password,
+                            @PathVariable String date
+    ){
+        int uid = User.userExist(email, password);
+        if(uid==-1) return false;
+        return Intake.getUserIntakesByDate(uid,date);
+    }
+
+    @RequestMapping(value = "/user/intake/summary", method = RequestMethod.GET)
+    Object getUserIntakeSummary(@CookieValue(value="email", defaultValue="unknown") String email,
+                               @CookieValue(value="password", defaultValue="unknown") String password
+    ){
+        int uid = User.userExist(email, password);
+        if(uid==-1) return false;
+        return Intake.getUserIntakesSummary(uid);
     }
 
 }

@@ -3,15 +3,14 @@ package com.iamvickyav.springbootmvcjsp.models;
 import com.iamvickyav.springbootmvcjsp.connection.MG;
 import com.iamvickyav.springbootmvcjsp.connection.MS;
 import com.iamvickyav.springbootmvcjsp.connection.Util;
+import com.mongodb.client.FindIterable;
 import org.bson.Document;
 
+import javax.print.Doc;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Intake {
     private int iid;
@@ -156,6 +155,8 @@ public class Intake {
         doc.putAll(json);
         doc.put("uid",uid);
         doc.put("email",email);
+        doc.put("time",Util.getTime());
+        doc.put("date",Util.getDate().toString());
         MG.getCollection("intakes").insertOne(doc);
         return true;
     }
@@ -177,13 +178,47 @@ public class Intake {
         }
     }
 
+    public static List<Document> getUserIntakesByDate(int uid, String date){
+        Iterable<Document> output = MG.getCollection("intakes").aggregate(Arrays.asList(
+                new Document("$match",new Document("uid",uid).append("date",date)),
+                new Document("$sort",new Document("time",-1)))
+        );
+        ArrayList<Document> list = new ArrayList();
+        for(Document doc:output) list.add(doc);
+        return list;
+    }
+
+    public static List<Document> getUserIntakesSummary(int uid){
+        Iterable<Document> output = MG.getCollection("intakes").aggregate(Arrays.asList(
+                new Document("$match",new Document("uid",uid)),
+                new Document("$group", new Document("_id","$date").
+                        append("calories",new Document("$sum","$calories")).
+                        append("protein",new Document("$sum","$protein")).
+                        append("carbohydrate",new Document("$sum","$carbohydrate")).
+                        append("fat",new Document("$sum","$fat")).
+                        append("count",new Document("$sum",1))),
+                new Document("$sort",new Document("date",-1))
+        ));
+        ArrayList<Document> list = new ArrayList();
+        for(Document doc:output) list.add(doc);
+        return list;
+    }
+
     public static void main(String[] args){
+        //Iterable<Document> output = MG.getCollection("intakes").aggregate(
+        //        Arrays.asList(
+        //        new Document("$group", new Document("_id","$uid").
+        //                append("calories",new Document("$sum","$calories")))
+        //       )
+        //);
+        Iterable<Document> output = Intake.getUserIntakesByDate(12,"2019-12-08");
+        for(Document doc:output) System.out.println(doc.get("calories"));
         //Intake.deleteIntake(3);
 
         //Intake.getUserIntakes(1);
 
         //System.out.println(PreparedStatement.RETURN_GENERATED_KEYS);
-        Diet d1 = new Diet();
+        /*Diet d1 = new Diet();
         d1.setFood("apple");
         d1.setAmount(1);
         d1.setUnit("kg");
@@ -197,6 +232,6 @@ public class Intake {
         diets.add(d1);
         diets.add(d2);
 
-        Intake.insertIntake(1,1,1,1,1,"dinner",diets);
+        Intake.insertIntake(1,1,1,1,1,"dinner",diets);*/
     }
 }
