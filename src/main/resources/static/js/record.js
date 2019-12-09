@@ -15,13 +15,16 @@ let addRecord = () => {
     $('#inputAmount').val('')
     $('#selectUnit').val('Piece')
     $('#inputFood').val('')
-    $('#summaryFoods').append(`<a class="list-item">${food} (${amount} ${unit})</a>`)
+    $('#summaryFoods').append(`<a class="list-item">${food} (${amount} ${unit})</a><button class="delete is-small"></button>`)
     foodRecords.push(`${amount} ${unit} ${food}`)
     foodRecords_json.push({
         food: food,
         amount: amount,
         unit: unit
     })
+    $(".delete").on("click", function(){
+        $(this).closest("li").remove();
+    });
     if(foodRecords.length==0) $('#summary').addClass('is-hidden');
     else $('#summary').removeClass('is-hidden');
 }
