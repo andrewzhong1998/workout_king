@@ -10,10 +10,9 @@ public class MS {
         Connection conn = null;
         try{
             Class.forName("com.mysql.jdbc.Driver");
-            String url="jdbc:mysql://3.136.74.106:3306/workout_king";
-            //String url="jdbc:mysql://18.219.30.202:3306/workout_king";
-            String username="workout_king";
-            String password="comp426";
+            String url="";
+            String username="";
+            String password="";
             conn = DriverManager.getConnection(url,username,password);
         }
         catch(Exception e){
