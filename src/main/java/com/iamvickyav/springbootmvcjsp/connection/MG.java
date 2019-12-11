@@ -16,8 +16,8 @@ public class MG {
     public static MongoDatabase getDB(){
         MongoDatabase db = null;
         try {
-            MongoClient client = new MongoClient(new MongoClientURI(""));
-            db = client.getDatabase("");
+            MongoClient client = new MongoClient(new MongoClientURI("mongodb://workout_king:comp426@3.136.74.106:27017"));
+            db = client.getDatabase("workout_king");
         } catch (Exception e) {
             e.printStackTrace();
         }

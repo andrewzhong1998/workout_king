@@ -1,5 +1,5 @@
-MS.java
-MG.java
+src/main/java/com/iamvickyav/springbootmvcjsp/connection/MS.java
+src/main/java/com/iamvickyav/springbootmvcjsp/connection/MG.java
 
 target/
 !.mvn/wrapper/maven-wrapper.jar
