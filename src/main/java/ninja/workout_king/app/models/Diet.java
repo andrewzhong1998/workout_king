@@ -1,4 +1,4 @@
-package com.iamvickyav.springbootmvcjsp.models;
+package ninja.workout_king.app.models;
 
 public class Diet {
     private String food;

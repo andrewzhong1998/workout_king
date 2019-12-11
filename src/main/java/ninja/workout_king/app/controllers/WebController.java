@@ -1,11 +1,8 @@
-package com.iamvickyav.springbootmvcjsp.controllers;
+package ninja.workout_king.app.controllers;
 
-import com.iamvickyav.springbootmvcjsp.models.User;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;

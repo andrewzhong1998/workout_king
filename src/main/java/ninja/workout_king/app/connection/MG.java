@@ -1,16 +1,10 @@
-package com.iamvickyav.springbootmvcjsp.connection;
+package ninja.workout_king.app.connection;
 
-import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
 
 public class MG {
     public static MongoDatabase getDB(){

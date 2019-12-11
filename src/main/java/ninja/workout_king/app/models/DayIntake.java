@@ -1,4 +1,4 @@
-package com.iamvickyav.springbootmvcjsp.models;
+package ninja.workout_king.app.models;
 
 import java.util.Date;
 import java.util.LinkedList;

@@ -1,3 +1,5 @@
+src/main/java/ninja/workout_king/app/connection/
+
 target/
 !.mvn/wrapper/maven-wrapper.jar
 

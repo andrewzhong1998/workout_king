@@ -1,12 +1,10 @@
-package com.iamvickyav.springbootmvcjsp.models;
+package ninja.workout_king.app.models;
 
-import com.iamvickyav.springbootmvcjsp.connection.MG;
-import com.iamvickyav.springbootmvcjsp.connection.MS;
-import com.iamvickyav.springbootmvcjsp.connection.Util;
-import com.mongodb.client.FindIterable;
+import ninja.workout_king.app.connection.MG;
+import ninja.workout_king.app.connection.MS;
+import ninja.workout_king.app.connection.Util;
 import org.bson.Document;
 
-import javax.print.Doc;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

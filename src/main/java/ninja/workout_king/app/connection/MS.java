@@ -1,4 +1,4 @@
-package com.iamvickyav.springbootmvcjsp.connection;
+package ninja.workout_king.app.connection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

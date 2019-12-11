@@ -1,15 +1,12 @@
-package com.iamvickyav.springbootmvcjsp.controllers;
+package ninja.workout_king.app.controllers;
 
-import com.iamvickyav.springbootmvcjsp.models.Diet;
-import com.iamvickyav.springbootmvcjsp.models.Intake;
-import com.iamvickyav.springbootmvcjsp.models.User;
-import org.bson.Document;
+import ninja.workout_king.app.models.Diet;
+import ninja.workout_king.app.models.Intake;
+import ninja.workout_king.app.models.User;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

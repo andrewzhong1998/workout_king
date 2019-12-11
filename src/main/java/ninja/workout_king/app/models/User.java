@@ -1,13 +1,10 @@
-package com.iamvickyav.springbootmvcjsp.models;
+package ninja.workout_king.app.models;
 
-import com.iamvickyav.springbootmvcjsp.connection.MS;
+import ninja.workout_king.app.connection.MS;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 
 public class User {
     private int uid;
