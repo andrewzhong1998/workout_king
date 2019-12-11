@@ -91,9 +91,9 @@
                 </div>
 
                 <div class="field">
-                    <label class="label">Height (Feet)</label>
+                    <label class="label">Height (Inches)</label>
                     <div class="control">
-                        <input id="inputHeight" class="input" type="text" placeholder="1 Feet = 12 Inches">
+                        <input id="inputHeight" class="input" type="text" placeholder="1 Foot = 12 Inches">
                     </div>
                     <p id="helpHeight" class="help is-danger is-hidden">Height must be a number</p>
                 </div>
@@ -125,6 +125,10 @@
                         <textarea id="inputMotto" class="textarea" placeholder="Keep fighting..."></textarea>
                     </div>
                     <p id="helpMotto" class="help is-danger is-hidden">Enter a valid motto</p>
+                </div>
+
+                <div class="field is-grouped">
+                    <button id="buttonBack" class="button is-block is-warning is-large is-fullwidth">Back</i></button>
                 </div>
 
                 <div class="field is-grouped">
@@ -166,6 +170,10 @@
     let target_weight = ''
     let gender = ''
     let motto = ''
+    $('#buttonBack').on('click',function(){
+        $('#step1').removeClass('is-hidden')
+        $('#step2').addClass('is-hidden')
+    })
     $('#buttonSignup').on('click',function(){
         name = $('#inputName').val();
         if(name==''){
@@ -200,7 +208,7 @@
         //console.log(user)
         signup(email,password,name,height,target_weight,gender,motto).then(res=>{
             if(res.data){
-                location.href = "login.html"
+                location.href = "user_dashboard.html"
             }
             else{
                 alert("Email already exists");

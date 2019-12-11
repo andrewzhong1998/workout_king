@@ -45,7 +45,14 @@ public class ApiController {
                   @RequestParam double height,
                   @RequestParam double target_weight,
                   @RequestParam String gender,
-                  @RequestParam String motto){
+                  @RequestParam String motto,
+                  HttpServletResponse response){
+        Cookie cookie1 = new Cookie("email", email);
+        Cookie cookie2 = new Cookie("password", password);
+        cookie1.setPath("/");
+        cookie2.setPath("/");
+        response.addCookie(cookie1);
+        response.addCookie(cookie2);
         return User.createUser(email,password,name,height,target_weight,gender,motto);
     }
 
