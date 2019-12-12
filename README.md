@@ -1,4 +1,4 @@
-#Workout King
+# Workout King
 
 This project aims to provide the advanced solution for people who want to keep track of their diet and weight. We have open-sourced the project, but gitignored sensitive files that include IP addresses, usernames, and passwords that can be used to make secure connections to our backend servers and databases.  
 
