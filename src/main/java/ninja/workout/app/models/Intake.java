@@ -195,7 +195,7 @@ public class Intake {
                         append("carbohydrate",new Document("$sum","$carbohydrate")).
                         append("fat",new Document("$sum","$fat")).
                         append("count",new Document("$sum",1))),
-                new Document("$sort",new Document("date",-1))
+                new Document("$sort",new Document("_id",-1))
         ));
         ArrayList<Document> list = new ArrayList();
         for(Document doc:output) list.add(doc);
@@ -209,8 +209,8 @@ public class Intake {
         //                append("calories",new Document("$sum","$calories")))
         //       )
         //);
-        Iterable<Document> output = Intake.getUserIntakesByDate(12,"2019-12-08");
-        for(Document doc:output) System.out.println(doc.get("calories"));
+        Iterable<Document> output = Intake.getUserIntakesSummary(12);
+        for(Document doc:output) System.out.println(doc.get("_id"));
         //Intake.deleteIntake(3);
 
         //Intake.getUserIntakes(1);
