@@ -1,4 +1,4 @@
-package ninja.workout_king.app.models;
+package ninja.workout.app.models;
 
 import java.util.Date;
 import java.util.LinkedList;

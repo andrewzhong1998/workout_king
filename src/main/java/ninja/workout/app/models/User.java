@@ -1,6 +1,6 @@
-package ninja.workout_king.app.models;
+package ninja.workout.app.models;
 
-import ninja.workout_king.app.connection.MS;
+import ninja.workout.app.connection.MS;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

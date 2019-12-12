@@ -1,4 +1,4 @@
-package ninja.workout_king.app.controllers;
+package ninja.workout.app.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

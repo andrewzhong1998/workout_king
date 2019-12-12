@@ -1,8 +1,8 @@
-package ninja.workout_king.app.models;
+package ninja.workout.app.models;
 
-import ninja.workout_king.app.connection.MG;
-import ninja.workout_king.app.connection.MS;
-import ninja.workout_king.app.connection.Util;
+import ninja.workout.app.connection.MG;
+import ninja.workout.app.connection.MS;
+import ninja.workout.app.connection.Util;
 import org.bson.Document;
 
 import java.sql.Connection;

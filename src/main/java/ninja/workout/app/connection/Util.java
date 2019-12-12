@@ -1,4 +1,4 @@
-package ninja.workout_king.app.connection;
+package ninja.workout.app.connection;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;

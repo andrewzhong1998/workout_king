@@ -1,4 +1,4 @@
-package ninja.workout_king.app;
+package ninja.workout.app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

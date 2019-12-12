@@ -1,4 +1,4 @@
-package ninja.workout_king.app.models;
+package ninja.workout.app.models;
 
 public class Diet {
     private String food;

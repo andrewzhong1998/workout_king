@@ -1,8 +1,8 @@
-package ninja.workout_king.app.controllers;
+package ninja.workout.app.controllers;
 
-import ninja.workout_king.app.models.Diet;
-import ninja.workout_king.app.models.Intake;
-import ninja.workout_king.app.models.User;
+import ninja.workout.app.models.Diet;
+import ninja.workout.app.models.Intake;
+import ninja.workout.app.models.User;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
